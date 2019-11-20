@@ -46,27 +46,6 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public ArrayList<Vehicle> getVehiclesBasedOnOption() {
-        ArrayList<Vehicle> result = new ArrayList<>();
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM vehicle");
-
-            while(rs.next()) {
-                Vehicle vehicle = new Vehicle(rs.getString("licensePlate"),
-                        VehicleType.getVehicleType(rs.getString("vtname")),
-                        VehicleStatus.getVehicleStatus(rs.getInt("status")));
-                result.add(vehicle);
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return result;
-    }
-
     // TODO: figure out how to do date comparision; try in Oracle
     public ArrayList<Vehicle> getVehiclesBasedOnOption(String carType, String location, String date) {
         ArrayList<Vehicle> result = new ArrayList<>();
@@ -83,7 +62,11 @@ public class DatabaseConnectionHandler {
             while(rs.next()) {
                 Vehicle vehicle = new Vehicle(rs.getString("licensePlate"),
                         VehicleType.getVehicleType(rs.getString("vtname")),
-                        VehicleStatus.getVehicleStatus(rs.getInt("status")));
+                        VehicleStatus.getVehicleStatus(rs.getInt("status")),
+                        rs.getString("color"),
+                        rs.getString("make"),
+                        rs.getString("model"),
+                        rs.getInt("year"));
                 result.add(vehicle);
             }
 

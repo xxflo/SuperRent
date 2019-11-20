@@ -1,5 +1,7 @@
 package ca.ubc.cs304.model;
 
+import java.util.HashMap;
+
 /**
  * Enumeration of vehicle type
  */
@@ -40,6 +42,19 @@ public enum VehicleType {
             default:
                 return null;
         }
+    }
+
+    public String getVehicleIcon(){
+        HashMap<VehicleType, String> carMap = new HashMap<>();
+        carMap.put(VehicleType.COMPACT, "🚗");
+        carMap.put(VehicleType.TRUCK, "\uD83D\uDE9A");
+        carMap.put(VehicleType.MID_SIZE, "🚘");
+        carMap.put(VehicleType.FULL_SIZE, "🚌");
+        carMap.put(VehicleType.SUV, "🚙");
+        carMap.put(VehicleType.ECONOMY, "🚘");
+        carMap.put(VehicleType.STANDARD, "🚐");
+        //String[] cars = {"🚗", "🚌", "🚙","🚘", "🚖", "🚜","🚐","\uD83D\uDE9A"};
+        return " " + carMap.get(this);
     }
 
 //    public final int wrate;

@@ -43,6 +43,16 @@
     -fx-text-fill:  #FFF;
 }
 
+@font-face {
+    font-family: 'OpenSansEmoji';
+    src: url('OpenSansEmoji.ttf');
+}
+
+.test_font {
+    -fx-font-family: OpenSansEmoji;
+    -fx-font-size: 15;
+}
+
 /*.titled-pane > .title*/
 /*{*/
 /*    -fx-background-color: #888;*/

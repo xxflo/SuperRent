@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -25,6 +26,8 @@ public class SuperRent extends Application {
 //        if(!didLogin) System.exit(0);
 
         Parent root = FXMLLoader.load(getClass().getResource(SceneSwitchUtil.loginFxml));
+        Font.loadFont(getClass().getResource("../styles/OpenSansEmoji.ttf").
+                toExternalForm(), 15);
         primaryStage.setScene(new Scene(root));
         primaryStage.initStyle(StageStyle.UNIFIED);
         primaryStage.setTitle("SuperRent");
