@@ -4,33 +4,22 @@ package ca.ubc.cs304.model;
  * Enumeration of vehicle type
  */
 public enum VehicleType {
-    ECONOMY(1, "Economy", 1, 2, 3, 4, 5, 6),
-    COMPACT(2, "Compact", 1, 2, 3, 4, 5, 6),
-    MID_SIZE(3, "Mid-size", 1, 2, 3, 4, 5, 6),
-    STANDARD(4, "Standard", 1, 2, 3, 4, 5, 6),
-    FULL_SIZE(5,"Full-size", 1, 2, 3, 4, 5, 6),
-    SUV(6, "SUV", 1, 2, 3, 4, 5, 6),
-    TRUCK(7, "Truck",1, 2, 3, 4, 5, 6);
 
-    private int code;
+    ECONOMY("Economy"),
+    COMPACT("Compact"),
+    MID_SIZE("Mid-size"),
+    STANDARD("Standard"),
+    FULL_SIZE("Full-size"),
+    SUV("SUV"),
+    TRUCK("Truck");
+
     private final String value;
-    public final int wrate;
-    public final int drate;
-    public final int hrate;
-    public final int wirate;
-    public final int hirate;
-    public final int krate;
 
-    VehicleType(int code, String value, int wrate, int drate, int hrate, int wirate, int hirate, int krate) {
-        this.code = code;
+    VehicleType(String value) {
         this.value = value;
-        this.wrate = wrate;
-        this.drate = drate;
-        this.hrate = hrate;
-        this.wirate = wirate;
-        this.hirate = hirate;
-        this.krate = krate;
     }
+
+    public String getValue(){return this.value;}
 
     public static VehicleType getVehicleType(String type) {
         switch (type) {
@@ -52,4 +41,22 @@ public enum VehicleType {
                 return null;
         }
     }
+
+//    public final int wrate;
+//    public final int drate;
+//    public final int hrate;
+//    public final int wirate;
+//    public final int hirate;
+//    public final int krate;
+//
+//    VehicleType(int code, String value, int wrate, int drate, int hrate, int wirate, int hirate, int krate) {
+//        this.code = code;
+//        this.value = value;
+//        this.wrate = wrate;
+//        this.drate = drate;
+//        this.hrate = hrate;
+//        this.wirate = wirate;
+//        this.hirate = hirate;
+//        this.krate = krate;
+//    }
 }

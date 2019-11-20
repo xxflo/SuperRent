@@ -6,13 +6,22 @@ package ca.ubc.cs304.model;
 public class Reservation {
     private final int confNo;
     private final VehicleType vehicleType;
-    private final String cellPhone;
+    private final String driverLicense;
+    private String location;
+    private Customer customer;
+    //TODO: Date
 
 
     public Reservation(int confNo, VehicleType vehicleType, String cellPhone) {
         this.confNo = confNo;
         this.vehicleType = vehicleType;
-        this.cellPhone = cellPhone;
+        this.driverLicense = cellPhone;
+    }
+
+    public Reservation(int confNo, VehicleType vehicleType, String cellPhone, String location, Customer customer) {
+        this.confNo = confNo;
+        this.vehicleType = vehicleType;
+        this.driverLicense = cellPhone;
     }
 
     public int getConfNo() {
@@ -23,7 +32,7 @@ public class Reservation {
         return vehicleType;
     }
 
-    public String getCellPhone() {
-        return cellPhone;
+    public String getDriverLicense() {
+        return driverLicense;
     }
 }

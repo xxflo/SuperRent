@@ -9,21 +9,21 @@ import ca.ubc.cs304.model.Customer;
  *      - New user toggle view: need to enter cellphone, name, address, driver's license(mandatory)
  */
 public class CustomerInfoScreen {
-    private CustomerDelegate delegate = null;
-
-    public CustomerInfoScreen(CustomerDelegate customerDelegate) {
-        this.delegate = customerDelegate;
-    }
-
-    // TODO
-    public Customer handleCustomerInfo() {
-        boolean isExisting = false;
-        Customer customer = new Customer(null,null,null);
-        if (isExisting) {
-            customer = delegate.getCustomer("Stub");
-        } else {
-            delegate.saveCustomer(customer);
-        }
-        return customer;
-    }
+//    private CustomerDelegate delegate = null;
+//
+//    public CustomerInfoScreen(CustomerDelegate customerDelegate) {
+//        this.delegate = customerDelegate;
+//    }
+//
+//    // TODO
+//    public Customer handleCustomerInfo() {
+//        boolean isExisting = false;
+//        Customer customer = new Customer(null,null, null, null);
+//        if (isExisting) {
+//            customer = delegate.getCustomer("Stub");
+//        } else {
+//            delegate.saveCustomer(customer);
+//        }
+//        return customer;
+//    }
 }
