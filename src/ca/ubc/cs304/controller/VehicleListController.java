@@ -12,11 +12,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+<<<<<<< HEAD
+=======
+import javafx.geometry.HPos;
+>>>>>>> fix design and logic in vehicle list
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+<<<<<<< HEAD
+=======
+import sun.jvm.hotspot.memory.Space;
+>>>>>>> fix design and logic in vehicle list
 
 import java.io.IOException;
 import java.net.URL;
@@ -60,6 +68,7 @@ public class VehicleListController implements Initializable {
      */
     public void handleSelectVehicleOptions(MouseEvent event) {
         String vType = vehicleType.getValue();
+<<<<<<< HEAD
         Branch location = BranchUtil.decodeBranchFromString(branchLocation.getValue());
         Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
         Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
@@ -70,12 +79,35 @@ public class VehicleListController implements Initializable {
 
         for(Vehicle v:vehicles){
             ArrayList<Vehicle> vehicleList = vehicleMap.get(v.getVtname());
+=======
+        String location = branchLocation.getValue();
+        // TODO: date is not working!!
+//        String date = startDate.getValue().toString();
+//        String date = startDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//        ArrayList<Vehicle> vehicles = dbHandler.getVehiclesBasedOnOption(vType,location,"date");
+
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        // Stub for now, just for testing
+        vehicles.add(new Vehicle("A12345",VehicleType.ECONOMY,null,"blue", "Toyota", "Corolla", 2014));
+        vehicles.add(new Vehicle("DE2345",VehicleType.ECONOMY,null,"red", "BMW", "M2", 2011));
+        vehicles.add(new Vehicle("FS2345",VehicleType.ECONOMY,null,"orange", "Ford", "Mustang", 2015));
+        vehicles.add(new Vehicle("SDF345",VehicleType.COMPACT,null,"orange", "Toyota", "Land Cruiser", 2016));
+        vehicles.add(new Vehicle("ABD945",VehicleType.TRUCK,null,"purple", "Nissan", "Titan", 2009));
+
+        HashMap<VehicleType,ArrayList<Vehicle>> vehicleMap = new HashMap<>();
+        for(Vehicle v:vehicles){
+            ArrayList<Vehicle> vehicleList = vehicleMap.get(v.getVehicleType());
+>>>>>>> fix design and logic in vehicle list
             if (vehicleList != null && vehicleList.size() > 0) {
                 vehicleList.add(v);
             } else {
                 vehicleList = new ArrayList<>();
                 vehicleList.add(v);
+<<<<<<< HEAD
                 vehicleMap.put(v.getVtname(),vehicleList);
+=======
+                vehicleMap.put(v.getVehicleType(),vehicleList);
+>>>>>>> fix design and logic in vehicle list
             }
         }
 
@@ -86,6 +118,7 @@ public class VehicleListController implements Initializable {
      * Show list of vehicles based on input options
      * @param vehicleMap
      */
+<<<<<<< HEAD
     private void showVehicles(HashMap<String, ArrayList<Vehicle>> vehicleMap) {
         ArrayList<TitledPane> panes = new ArrayList<>();
         for(String key : vehicleMap.keySet()){
@@ -94,6 +127,15 @@ public class VehicleListController implements Initializable {
 
             BorderPane borderPane = new BorderPane();
             Label title = new Label(key + " (" + vehicles.size() + ")");
+=======
+    private void showVehicles(HashMap<VehicleType, ArrayList<Vehicle>> vehicleMap) {
+        ArrayList<TitledPane> panes = new ArrayList<>();
+        for(VehicleType key : vehicleMap.keySet()){
+            TitledPane newPane = new TitledPane();
+
+            BorderPane borderPane = new BorderPane();
+            Label title = new Label(key.getValue());
+>>>>>>> fix design and logic in vehicle list
             BorderPane.setAlignment(title, Pos.CENTER);
             title.setMinWidth(250.0);
             Button btnReserve = new Button("Reserve");
@@ -105,6 +147,10 @@ public class VehicleListController implements Initializable {
             newPane.setAnimated(false);
             newPane.setPrefHeight(32.0);
 
+<<<<<<< HEAD
+=======
+            ArrayList<Vehicle> vehicles = vehicleMap.get(key);
+>>>>>>> fix design and logic in vehicle list
             ListView listView = new ListView();
             btnReserve.setOnAction((event)->{
                 System.out.println("Reserve Button Clicked");
@@ -117,7 +163,11 @@ public class VehicleListController implements Initializable {
             vehicles.forEach(vehicle -> {
                 HBox vehicleHBox = new HBox();
                 Label field = new Label(vehicle.toString());
+<<<<<<< HEAD
                 Label iconField = new Label(VehicleTypeName.getVehicleTypeName(key).getVehicleIcon());
+=======
+                Label iconField = new Label(key.getVehicleIcon());
+>>>>>>> fix design and logic in vehicle list
                 iconField.getStyleClass().add("test_font");
                 iconField.setStyle("-fx-text-fill: " + vehicle.getColor());
                 vehicleHBox.getChildren().add(field);

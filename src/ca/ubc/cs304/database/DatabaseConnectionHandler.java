@@ -47,6 +47,7 @@ public class DatabaseConnectionHandler {
         }
     }
 
+<<<<<<< HEAD
     public ArrayList<Customer> getAllCustomers() {
         ArrayList<Customer> result = new ArrayList<>();
         try {
@@ -209,11 +210,16 @@ public class DatabaseConnectionHandler {
 
     // TODO: Fix Location and Time Filter
     public ArrayList<Vehicle> getVehiclesBasedOnOption(String carType, Branch branch, Timestamp startDateTime, Timestamp endDateTime) {
+=======
+    // TODO: figure out how to do date comparision; try in Oracle
+    public ArrayList<Vehicle> getVehiclesBasedOnOption(String carType, String location, String date) {
+>>>>>>> fix design and logic in vehicle list
         ArrayList<Vehicle> result = new ArrayList<>();
         String vTypeCrit = "", cityCrit="", locationCrit="";
         String and = " AND ";
         try {
             Statement stmt = connection.createStatement();
+<<<<<<< HEAD
             String queryMain = "SELECT * FROM Vehicle LEFT JOIN Rent ON Vehicle.vlicense = Rent.vlicense WHERE";
             vTypeCrit = carType.isEmpty()? " " : "vtname = " + carType + and + "";
             cityCrit = "city = '" + branch.getCity() + "'";
@@ -236,6 +242,24 @@ public class DatabaseConnectionHandler {
                         rs.getString("VTNAME"),
                         VehicleStatus.getVehicleStatus(rs.getString("STATUS"))
                 );
+=======
+            String queryMain = "SELECT * FROM vehicle";
+            String where = (!carType.isEmpty()||!location.isEmpty()||!date.isEmpty())? " WHERE " : "";
+            String vTypeCrit = carType.isEmpty()? "" : "vtname = " + carType;
+            String locCrit = location.isEmpty()? "" : "vtname = " + location;
+            //TODO: fix date
+            String dateCrit = date.isEmpty()? "" : "date = " + date;
+
+            ResultSet rs = stmt.executeQuery(queryMain + where + vTypeCrit + locCrit + dateCrit);
+            while(rs.next()) {
+                Vehicle vehicle = new Vehicle(rs.getString("licensePlate"),
+                        VehicleType.getVehicleType(rs.getString("vtname")),
+                        VehicleStatus.getVehicleStatus(rs.getInt("status")),
+                        rs.getString("color"),
+                        rs.getString("make"),
+                        rs.getString("model"),
+                        rs.getInt("year"));
+>>>>>>> fix design and logic in vehicle list
                 result.add(vehicle);
             }
 
