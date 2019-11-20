@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.ConfirmationController">
+   <children>
+       <Pane prefHeight="500.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+           <Label alignment="CENTER" layoutX="230.0" layoutY="80.0" prefHeight="23.0" text="Your Reservation is Confirmed!" textFill="#000">
+               <font>
+                   <Font name="American Typewriter" size="25.0" />
+               </font>
+           </Label>
+           <Label layoutX="100.0" layoutY="150.0" prefHeight="32.0" prefWidth="354.0" text="Confirmation Number: ">
+               <font>
+                   <Font name="American Typewriter" size="18.0" />
+               </font>
+           </Label>
+           <Label fx:id="confNum" layoutX="310.0" layoutY="150.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+               <font>
+                   <Font name="American Typewriter" size="18.0" />
+               </font>
+           </Label>
+           <Label layoutX="100.0" layoutY="200.0" prefHeight="32.0" prefWidth="354.0" text="Vehicle Type:">
+               <font>
+                   <Font name="American Typewriter" size="18.0" />
+               </font>
+           </Label>
+           <Label fx:id="typeName" layoutX="310.0" layoutY="200.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+               <font>
+                   <Font name="American Typewriter" size="18.0" />
+               </font>
+           </Label>
+           <Label layoutX="100.0" layoutY="250.0" prefHeight="32.0" prefWidth="354.0" text="Date: ">
+               <font>
+                   <Font name="American Typewriter" size="18.0" />
+               </font>
+           </Label>
+           <Label fx:id="date" layoutX="310.0" layoutY="250.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+               <font>
+                   <Font name="American Typewriter" size="18.0" />
+               </font>
+           </Label>
+           <Button fx:id="btnGoBackHome" layoutX="350.0" layoutY="360.0" mnemonicParsing="false" prefHeight="50.0"
+                   prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page"
+                   onAction="#handleGoBackMainPressed"/>
+       </Pane>
+   </children>
+</AnchorPane>
