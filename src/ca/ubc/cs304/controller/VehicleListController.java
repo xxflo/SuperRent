@@ -33,7 +33,8 @@ public class VehicleListController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Arrays.asList(VehicleType.values()).forEach(item -> vehicleType.getItems().add(item.getValue()));
-        vehicleType.getSelectionModel().select(VehicleType.COMPACT.getValue());
+        vehicleType.getItems().add("");
+        vehicleType.getSelectionModel().select("");
         branchLocation.getItems().addAll("Vancouver", "Burnaby", "Richmond");
         branchLocation.getSelectionModel().select("Vancouver");
     }
