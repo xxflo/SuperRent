@@ -43,7 +43,7 @@
     -fx-text-fill:  #FFF;
 }
 
-.titled-pane > .title
-{
-    -fx-background-color: #6cb881;
-}
+/*.titled-pane > .title*/
+/*{*/
+/*    -fx-background-color: #888;*/
+/*}*/

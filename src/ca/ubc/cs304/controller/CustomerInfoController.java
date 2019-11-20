@@ -29,8 +29,8 @@ public class CustomerInfoController implements Initializable {
     public Label newLabelError;
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
-    public Customer customer;
-    public VehicleType intendedVehicleType;
+    private Customer customer;
+    private VehicleType intendedVehicleType;
 //    public Branch intendedBranch;
 
     @Override

@@ -67,7 +67,9 @@ public class VehicleListController implements Initializable {
         System.out.println("Show me some vehicles");
         ArrayList<TitledPane> panes = new ArrayList<>();
         vehicles.forEach((item) -> {
-            TitledPane newPane = new TitledPane( "testtesttest", new Button("Reserve"));
+            TitledPane newPane = new TitledPane( "Test Vehicle", new Button("Reserve"));
+            newPane.setAnimated(false);
+            newPane.setPrefHeight(32.0);
             ListView listView = new ListView();
             Button btnReserve = new Button("Reserve");
             btnReserve.setOnAction((event)->{

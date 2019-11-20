@@ -20,9 +20,13 @@
                <Button fx:id="btnSearch" layoutX="70.0" layoutY="360.0" mnemonicParsing="false" onMouseClicked="#handleSelectVehicleOptions" prefHeight="32.0" prefWidth="278.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Search" />
            </children>
        </Pane>
-       <Pane prefHeight="500.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="390.0" AnchorPane.topAnchor="0.0">
-           <Label fx:id="labelStatus" layoutY="5.0" prefHeight="32.0" prefWidth="354.0" text="Status :" />
-           <Accordion fx:id="resultAccordion" layoutY="50.0" prefHeight="800.0" prefWidth="429.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="390.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+       <Pane prefHeight="500.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0">
+           <Label fx:id="labelStatus" alignment="CENTER" layoutY="100.0" prefHeight="23.0" prefWidth="200.0" text="Results Found :">
+               <font>
+                   <Font name="American Typewriter" size="16.0" />
+               </font>
+           </Label>
+           <Accordion fx:id="resultAccordion" layoutX="30" layoutY="150" prefWidth="350.0" prefHeight="300.0"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="390.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
            </Accordion>
        </Pane>
    </children>
