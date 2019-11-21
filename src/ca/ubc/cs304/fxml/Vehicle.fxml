@@ -5,12 +5,19 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<<<<<<< HEAD
 <?import javafx.scene.control.Spinner?>
+=======
+>>>>>>> add count to vehicle type in list view
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<<<<<<< HEAD
 <AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="ca.ubc.cs304.controller.VehicleListController">
+=======
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.VehicleListController">
+>>>>>>> add count to vehicle type in list view
    <children>
        <Pane prefHeight="500.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
            <children>
@@ -34,7 +41,7 @@
                    <Font name="American Typewriter" size="16.0" />
                </font>
            </Label>
-           <Accordion fx:id="resultAccordion" layoutX="30" layoutY="150" prefWidth="350.0" prefHeight="300.0"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="390.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+           <Accordion fx:id="resultAccordion" layoutX="30" layoutY="150" prefHeight="300.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="390.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
            </Accordion>
        </Pane>
    </children>
