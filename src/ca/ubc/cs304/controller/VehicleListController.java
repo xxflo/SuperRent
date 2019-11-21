@@ -88,10 +88,11 @@ public class VehicleListController implements Initializable {
     private void showVehicles(HashMap<VehicleType, ArrayList<Vehicle>> vehicleMap) {
         ArrayList<TitledPane> panes = new ArrayList<>();
         for(VehicleType key : vehicleMap.keySet()){
+            ArrayList<Vehicle> vehicles = vehicleMap.get(key);
             TitledPane newPane = new TitledPane();
 
             BorderPane borderPane = new BorderPane();
-            Label title = new Label(key.getValue());
+            Label title = new Label(key.getValue() + " (" + vehicles.size() + ")");
             BorderPane.setAlignment(title, Pos.CENTER);
             title.setMinWidth(250.0);
             Button btnReserve = new Button("Reserve");
@@ -103,7 +104,6 @@ public class VehicleListController implements Initializable {
             newPane.setAnimated(false);
             newPane.setPrefHeight(32.0);
 
-            ArrayList<Vehicle> vehicles = vehicleMap.get(key);
             ListView listView = new ListView();
             btnReserve.setOnAction((event)->{
                 System.out.println("Reserve Button Clicked");
