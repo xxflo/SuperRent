@@ -46,6 +46,166 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public ArrayList<Customer> getAllCustomers() {
+        ArrayList<Customer> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM CUSTOMER");
+            while (rs.next()) {
+                Customer customer = new Customer(
+                        rs.getString("dlicense"),
+                        rs.getString("cellphone"),
+                        rs.getString("address"),
+                        rs.getString("name")
+                );
+                result.add(customer);
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    public ArrayList<Reservation> getAllReservations() {
+        ArrayList<Reservation> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM RESERVATION");
+            while (rs.next()) {
+                Reservation reservation = new Reservation(
+                        rs.getString("confno"),
+                        rs.getString("vtname"),
+                        rs.getString("dlicense")
+                );
+                result.add(reservation);
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    public ArrayList<Rental> getAllRentals() {
+        ArrayList<Rental> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM RENT");
+            while (rs.next()) {
+                Rental rental = new Rental(
+                        rs.getString("RID"),
+                        rs.getString("VLICENSE"),
+                        rs.getString("DLICENSE"),
+                        rs.getInt("ODOMETER"),
+                        rs.getString("CARDNAME"),
+                        rs.getString("CARDNO"),
+                        rs.getString("EXPDATE"),
+                        rs.getString("CONFNO")
+                );
+                result.add(rental);
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    public ArrayList<Vehicle> getAllVehicles() {
+        ArrayList<Vehicle> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM VEHICLE");
+            while (rs.next()) {
+                Vehicle vehicle = new Vehicle(
+                        rs.getString("VLICENSE"),
+                        rs.getString("MAKE"),
+                        rs.getString("MODEL"),
+                        rs.getString("YEAR"),
+                        rs.getString("COLOR"),
+                        rs.getInt("ODOMETER"),
+                        rs.getString("LOCATION"),
+                        rs.getString("CITY"),
+                        rs.getString("VTNAME"),
+                        VehicleStatus.getVehicleStatus(rs.getString("STATUS"))
+                );
+                result.add(vehicle);
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    public ArrayList<Branch> getAllBranches() {
+        ArrayList<Branch> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM BRANCH");
+            while (rs.next()) {
+                Branch branch = new Branch(
+                        rs.getString("LOCATION"),
+                        rs.getString("CITY")
+                );
+                result.add(branch);
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    public ArrayList<Return> getAllReturns() {
+        ArrayList<Return> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM RETURN");
+            while (rs.next()) {
+                Return branch = new Return(
+                        rs.getString("RID"),
+                        rs.getInt("ODOMETER"),
+                        rs.getBoolean("FULLTANK"),
+                        rs.getDouble("VALUE")
+                );
+                result.add(branch);
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    public ArrayList<VehicleType> getAllVehicleTypes() {
+        ArrayList<VehicleType> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM VEHICLETYPE");
+            while (rs.next()) {
+                VehicleType vt = new VehicleType(
+                        rs.getString("VTNAME"),
+                        rs.getString("FEATURES"),
+                        rs.getDouble("WRATE"),
+                        rs.getDouble("DRATE"),
+                        rs.getDouble("HRATE"),
+                        rs.getDouble("WIRATE"),
+                        rs.getDouble("DIRATE"),
+                        rs.getDouble("HIRATE"),
+                        rs.getDouble("KRATE")
+                );
+                result.add(vt);
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
+    }
+
+
     public ArrayList<Vehicle> getVehiclesBasedOnOption() {
         ArrayList<Vehicle> result = new ArrayList<>();
         try {
@@ -53,9 +213,18 @@ public class DatabaseConnectionHandler {
             ResultSet rs = stmt.executeQuery("SELECT * FROM vehicle");
 
             while(rs.next()) {
-                Vehicle vehicle = new Vehicle(rs.getString("licensePlate"),
-                        VehicleType.getVehicleType(rs.getString("vtname")),
-                        VehicleStatus.getVehicleStatus(rs.getInt("status")));
+                Vehicle vehicle = new Vehicle(
+                        rs.getString("VLICENSE"),
+                        rs.getString("MAKE"),
+                        rs.getString("MODEL"),
+                        rs.getString("YEAR"),
+                        rs.getString("COLOR"),
+                        rs.getInt("ODOMETER"),
+                        rs.getString("LOCATION"),
+                        rs.getString("CITY"),
+                        rs.getString("VTNAME"),
+                        VehicleStatus.getVehicleStatus(rs.getString("STATUS"))
+                );
                 result.add(vehicle);
             }
 
@@ -81,9 +250,18 @@ public class DatabaseConnectionHandler {
 
             ResultSet rs = stmt.executeQuery(queryMain + where + vTypeCrit + locCrit + dateCrit);
             while(rs.next()) {
-                Vehicle vehicle = new Vehicle(rs.getString("licensePlate"),
-                        VehicleType.getVehicleType(rs.getString("vtname")),
-                        VehicleStatus.getVehicleStatus(rs.getInt("status")));
+                Vehicle vehicle = new Vehicle(
+                        rs.getString("VLICENSE"),
+                        rs.getString("MAKE"),
+                        rs.getString("MODEL"),
+                        rs.getString("YEAR"),
+                        rs.getString("COLOR"),
+                        rs.getInt("ODOMETER"),
+                        rs.getString("LOCATION"),
+                        rs.getString("CITY"),
+                        rs.getString("VTNAME"),
+                        VehicleStatus.getVehicleStatus(rs.getString("STATUS"))
+                );
                 result.add(vehicle);
             }
 
@@ -99,8 +277,8 @@ public class DatabaseConnectionHandler {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO reservation VALUES (?,?,?)");
 
-            ps.setInt(1, reservation.getConfNo());
-            ps.setString(2, reservation.getVehicleType().getValue());
+            ps.setString(1, reservation.getConfNo());
+            ps.setString(2, reservation.getVtname());
             ps.setString(3, reservation.getDriverLicense());
             ps.executeUpdate();
             connection.commit();
@@ -160,20 +338,20 @@ public class DatabaseConnectionHandler {
         }
     }
 
-//    public boolean login() {
-//        try {
-//            if (connection != null) {
-//                connection.close();
-//            }
-//
-//            connection = DriverManager.getConnection(ORACLE_URL, "", "");
-//            connection.setAutoCommit(false);
-//
-//            System.out.println("\nConnected to Oracle!");
-//            return true;
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//            return false;
-//        }
-//    }
+    public boolean login() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+
+            connection = DriverManager.getConnection(ORACLE_URL, "ora_dbajj", "a36868123");
+            connection.setAutoCommit(false);
+
+            System.out.println("\nConnected to Oracle!");
+            return true;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return false;
+        }
+    }
 }

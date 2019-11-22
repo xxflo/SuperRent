@@ -3,6 +3,7 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.Vehicle;
 import ca.ubc.cs304.model.VehicleType;
+import ca.ubc.cs304.model.VehicleTypeName;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,7 +33,7 @@ public class VehicleListController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Arrays.asList(VehicleType.values()).forEach(item -> vehicleType.getItems().add(item.getValue()));
+        Arrays.asList(VehicleTypeName.values()).forEach(item -> vehicleType.getItems().add(item.getName()));
         vehicleType.getItems().add("");
         vehicleType.getSelectionModel().select("");
         branchLocation.getItems().addAll("Vancouver", "Burnaby", "Richmond");
@@ -54,9 +55,6 @@ public class VehicleListController implements Initializable {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
         // TODO: save vehicle in a Map, so that expand to show vehicles does what it supposed to;
         // Each vehicle type maps to a list of available vehicles
-        vehicles.add(new Vehicle(null,VehicleType.ECONOMY,null));
-        vehicles.add(new Vehicle(null,VehicleType.COMPACT,null));
-        vehicles.add(new Vehicle(null,VehicleType.TRUCK,null));
         showVehicles(vehicles);
     }
 
@@ -73,7 +71,7 @@ public class VehicleListController implements Initializable {
             btnReserve.setOnAction((event)->{
                 System.out.println("Button Action");
                 try {
-                    switchToCustomerInfo(event, item.vehicleType);
+                    switchToCustomerInfo(event, VehicleTypeName.getVehicleTypeName(item.getVtname()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -88,7 +86,7 @@ public class VehicleListController implements Initializable {
         resultAccordion.getPanes().addAll(panes);
     }
 
-    private void switchToCustomerInfo(ActionEvent actionEvent, VehicleType vehicleType) throws IOException {
+    private void switchToCustomerInfo(ActionEvent actionEvent, VehicleTypeName vehicleType) throws IOException {
         FXMLLoader loader = sceneSwitchUtil.getLoaderForScene(SceneSwitchUtil.customerInfoFxml);
         Parent root = loader.load();
 
