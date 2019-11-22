@@ -67,4 +67,9 @@ public class Vehicle {
     public String getColor() {
         return color;
     }
+
+    @Override
+    public String toString(){
+        return "ID: " + vlicense + "  " + make + "  " + model + "  " + year;
+    }
 }

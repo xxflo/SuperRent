@@ -42,14 +42,14 @@ public class CustomerInfoController implements Initializable {
         if (!driverLicense.getText().isEmpty()){
             customer = getCustomer(driverLicense.getText());
             if (customer == null) {
-                labelError.setText("Customer does not exist. Try again or sign up instead");
+                labelError.setText("Customer does not exist. Try again or sign up instead.");
             } else {
+                System.out.println("Customer name " + customer.getName() + " " + customer.getLicense());
                 switchToReservation(actionEvent,intendedVehicleType,customer);
             }
         } else {
             labelError.setText("Field cannot be empty");
             driverLicense.setStyle("-fx-border-color: red");
-            customer = new Customer("test","test","test","test");
             switchToReservation(actionEvent,intendedVehicleType,customer);
         }
     }
@@ -97,10 +97,4 @@ public class CustomerInfoController implements Initializable {
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);
     }
-
-    // TODO: after deciding on how to model branch
-//    void setIntendedLocation(Branch branch){
-//        this.intendedBranch = branch;
-//        System.out.println(intendedBranch);
-//    }
 }

@@ -1,14 +1,14 @@
 package ca.ubc.cs304.model;
 
 public enum VehicleStatus {
-    RENTED(0),
-    MAINTENANCE(1),
-    AVAILABLE(2);
+    RENTED("rented"),
+    MAINTENANCE("maintenence_shop"),
+    AVAILABLE("available");
 
-    private int code;
+    private String status;
 
-    VehicleStatus(int code) {
-        this.code = code;
+    VehicleStatus(String status) {
+        status = status;
     }
     public static VehicleStatus getVehicleStatus(String code) {
         switch (code) {

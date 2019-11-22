@@ -1,5 +1,7 @@
 package ca.ubc.cs304.model;
 
+import java.util.HashMap;
+
 public enum VehicleTypeName {
     ECONOMY("Economy"),
     COMPACT("Compact"),
@@ -36,7 +38,19 @@ public enum VehicleTypeName {
             case "Truck":
                 return TRUCK;
             default:
-                return null;
+                return ECONOMY;
         }
+    }
+
+    public String getVehicleIcon(){
+        HashMap<VehicleTypeName, String> carMap = new HashMap<>();
+        carMap.put(VehicleTypeName.COMPACT, "🚗");
+        carMap.put(VehicleTypeName.TRUCK, "\uD83D\uDE9A");
+        carMap.put(VehicleTypeName.MID_SIZE, "🚘");
+        carMap.put(VehicleTypeName.FULL_SIZE, "🚌");
+        carMap.put(VehicleTypeName.SUV, "🚙");
+        carMap.put(VehicleTypeName.ECONOMY, "🚘");
+        carMap.put(VehicleTypeName.STANDARD, "🚐");
+        return " " + carMap.get(this);
     }
 }

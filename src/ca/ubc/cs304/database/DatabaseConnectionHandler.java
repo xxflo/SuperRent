@@ -1,6 +1,7 @@
 package ca.ubc.cs304.database;
 
 import ca.ubc.cs304.model.*;
+import ca.ubc.cs304.util.LoginCreds;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -76,8 +77,9 @@ public class DatabaseConnectionHandler {
                 Reservation reservation = new Reservation(
                         rs.getString("confno"),
                         rs.getString("vtname"),
-                        rs.getString("dlicense")
-                );
+                        rs.getString("dlicense"),
+                        Timestamp.valueOf(rs.getString("fromDateTime")),
+                        Timestamp.valueOf(rs.getString("toDateTime")));
                 result.add(reservation);
             }
         } catch (SQLException e) {
@@ -205,51 +207,23 @@ public class DatabaseConnectionHandler {
         return result;
     }
 
-
-    public ArrayList<Vehicle> getVehiclesBasedOnOption() {
+    // TODO: Fix Location and Time Filter
+    public ArrayList<Vehicle> getVehiclesBasedOnOption(String carType, Branch branch, Timestamp startDateTime, Timestamp endDateTime) {
         ArrayList<Vehicle> result = new ArrayList<>();
+        String vTypeCrit = "", cityCrit="", locationCrit="";
+        String and = " AND ";
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM vehicle");
+            String queryMain = "SELECT * FROM Vehicle LEFT JOIN Rent ON Vehicle.vlicense = Rent.vlicense WHERE";
+            vTypeCrit = carType.isEmpty()? " " : "vtname = " + carType + and + "";
+            cityCrit = "city = '" + branch.getCity() + "'";
+            locationCrit = "location = '" + branch.getLocation() + "'";
+            String dateCrit = "(fromDateTime = null AND toDateTime = null)";
+            String dateCriteExtra = " OR (toDateTime < '" + startDateTime + "')";
+            String sql = queryMain + vTypeCrit + cityCrit + and + locationCrit;
 
-            while(rs.next()) {
-                Vehicle vehicle = new Vehicle(
-                        rs.getString("VLICENSE"),
-                        rs.getString("MAKE"),
-                        rs.getString("MODEL"),
-                        rs.getString("YEAR"),
-                        rs.getString("COLOR"),
-                        rs.getInt("ODOMETER"),
-                        rs.getString("LOCATION"),
-                        rs.getString("CITY"),
-                        rs.getString("VTNAME"),
-                        VehicleStatus.getVehicleStatus(rs.getString("STATUS"))
-                );
-                result.add(vehicle);
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return result;
-    }
-
-    // TODO: figure out how to do date comparision; try in Oracle
-    public ArrayList<Vehicle> getVehiclesBasedOnOption(String carType, String location, String date) {
-        ArrayList<Vehicle> result = new ArrayList<>();
-        try {
-            Statement stmt = connection.createStatement();
-            String queryMain = "SELECT * FROM vehicle";
-            String where = (!carType.isEmpty()||!location.isEmpty()||!date.isEmpty())? " WHERE " : "";
-            String vTypeCrit = carType.isEmpty()? "" : "vtname = " + carType;
-            String locCrit = location.isEmpty()? "" : "vtname = " + location;
-            //TODO: fix date
-            String dateCrit = date.isEmpty()? "" : "date = " + date;
-
-            ResultSet rs = stmt.executeQuery(queryMain + where + vTypeCrit + locCrit + dateCrit);
-            while(rs.next()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
                 Vehicle vehicle = new Vehicle(
                         rs.getString("VLICENSE"),
                         rs.getString("MAKE"),
@@ -315,7 +289,7 @@ public class DatabaseConnectionHandler {
 
     public boolean insertCustomer(Customer customer) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO customer VALUES (?,?,?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO customer VALUES (?,?,?,?)");
             ps.setString(1, customer.getPhoneNum());
             ps.setString(2, customer.getName());
             ps.setString(3, customer.getAddress());
@@ -323,11 +297,12 @@ public class DatabaseConnectionHandler {
             ps.executeUpdate();
             connection.commit();
             ps.close();
+            return true;
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
+            return false;
         }
-        return false;
     }
 
     private void rollbackConnection() {
@@ -344,7 +319,7 @@ public class DatabaseConnectionHandler {
                 connection.close();
             }
 
-            connection = DriverManager.getConnection(ORACLE_URL, "ora_dbajj", "a36868123");
+            connection = DriverManager.getConnection(ORACLE_URL, LoginCreds.userName, LoginCreds.passWord);
             connection.setAutoCommit(false);
 
             System.out.println("\nConnected to Oracle!");

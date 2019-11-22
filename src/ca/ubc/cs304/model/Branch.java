@@ -17,4 +17,9 @@ public class Branch {
     public String getCity() {
         return city;
     }
+
+    @Override
+    public String toString(){
+        return location + "," + city;
+    }
 }
