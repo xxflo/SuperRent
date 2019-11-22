@@ -32,7 +32,7 @@ public class ConfirmationController implements Initializable {
     void setReservation(Reservation reservation) {
         System.out.println(reservation.getConfNo());
         confNum.setText(String.valueOf(reservation.getConfNo()));
-        typeName.setText(reservation.getVehicleType().getValue());
+        typeName.setText(reservation.getVtname());
         //TODO: fix this to be a date
         date.setText("DD-MM-YYYY-TIME");
     }

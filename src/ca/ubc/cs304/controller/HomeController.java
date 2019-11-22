@@ -18,6 +18,9 @@ public class HomeController implements Initializable {
     @FXML
     private Button btnClerk;
 
+    @FXML
+    private Button btnAdmin;
+
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
 
     @Override
@@ -31,6 +34,10 @@ public class HomeController implements Initializable {
         }
         if (actionEvent.getSource() == btnClerk) {
             btnClerk.setStyle("-fx-background-color : #1620A1");
+        }
+        if (actionEvent.getSource() == btnAdmin) {
+            btnCustomer.setStyle("-fx-background-color: #1620A1");
+            sceneSwitchUtil.switchSceneTo(actionEvent, SceneSwitchUtil.adminFxml);
         }
     }
 }

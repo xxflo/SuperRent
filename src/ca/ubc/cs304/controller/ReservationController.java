@@ -4,6 +4,7 @@ import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.Customer;
 import ca.ubc.cs304.model.Reservation;
 import ca.ubc.cs304.model.VehicleType;
+import ca.ubc.cs304.model.VehicleTypeName;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +34,7 @@ public class ReservationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Arrays.asList(VehicleType.values()).forEach(item -> vehicleType.getItems().add(item.getValue()));
+        Arrays.asList(VehicleTypeName.values()).forEach(item -> vehicleType.getItems().add(item.getName()));
     }
 
     public void setCustomer(Customer customer) {
@@ -41,15 +42,15 @@ public class ReservationController implements Initializable {
         System.out.println(customer.getName());
     }
 
-    void setIntendedVehicleType(VehicleType vehicleType){
-        this.vehicleType.getSelectionModel().select(vehicleType.getValue());
+    void setIntendedVehicleType(VehicleTypeName vehicleType){
+        this.vehicleType.getSelectionModel().select(vehicleType.getName());
         System.out.println(vehicleType);
     }
 
     public void handleConfirmPressed(ActionEvent actionEvent) throws IOException {
-        int confNo = new Random().nextInt(100000);
-        VehicleType selectedVehicleType = VehicleType.getVehicleType(vehicleType.getValue());
-        Reservation reservation = new Reservation(confNo, selectedVehicleType, customer.getLicense());
+        String confNo = String.valueOf(new Random().nextInt(100000));
+        VehicleTypeName selectedVehicleType = VehicleTypeName.getVehicleTypeName(vehicleType.getValue());
+        Reservation reservation = new Reservation(confNo, selectedVehicleType.getName(), customer.getLicense());
         switchToConfirmation(actionEvent, reservation);
         boolean isReserveSuccess = makeReservation(reservation);
         if (isReserveSuccess){

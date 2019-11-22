@@ -21,8 +21,8 @@ public class SuperRent extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // To log in to Oracle, change credential and uncomment in DbConnectionHandler
-//        boolean didLogin = dbHandler.login();
-//        if(!didLogin) System.exit(0);
+        boolean didLogin = dbHandler.login();
+        if(!didLogin) System.exit(0);
 
         Parent root = FXMLLoader.load(getClass().getResource(SceneSwitchUtil.loginFxml));
         primaryStage.setScene(new Scene(root));

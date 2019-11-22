@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.AdminController">
+   <children>
+      <TabPane prefHeight="500.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="View Data">
+            <content>
+              <AnchorPane fx:id="viewPane" minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="608.0">
+                     <children>
+                        <ComboBox fx:id="tableViewBox" layoutX="9.0" layoutY="8.0" onAction="#handleTableViewSelection" prefHeight="25.0" prefWidth="141.0" promptText="Select Table" />
+                        <TableView fx:id="tableView" layoutX="9.0" layoutY="49.0" prefHeight="401.0" prefWidth="776.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Insert Data">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

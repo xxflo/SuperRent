@@ -10,13 +10,13 @@ public enum VehicleStatus {
     VehicleStatus(int code) {
         this.code = code;
     }
-    public static VehicleStatus getVehicleStatus(int code) {
+    public static VehicleStatus getVehicleStatus(String code) {
         switch (code) {
-            case 0:
+            case "rented":
                 return RENTED;
-            case 1:
+            case "maintenance":
                 return MAINTENANCE;
-            case 2:
+            case "available":
                 return AVAILABLE;
             default:
                 return null;

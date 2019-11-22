@@ -11,7 +11,8 @@
             <Font name="American Typewriter" size="50.0" />
          </font>
       </Label>
-       <Button fx:id="btnClerk" layoutX="250.0" layoutY="280.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="108.0" style="-fx-background-color: #6cb881;" text="Clerk Mode" textFill="WHITE" onAction="#handleClicks"/>
-       <Button fx:id="btnCustomer" layoutX="430.0" layoutY="280.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="108.0" style="-fx-background-color: #FCBB31;" text="Customer Mode" textFill="WHITE" onAction="#handleClicks"/>
+       <Button fx:id="btnClerk" layoutX="250.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="50.0" prefWidth="108.0" style="-fx-background-color: #6cb881;" text="Clerk Mode" textFill="WHITE" />
+       <Button fx:id="btnCustomer" layoutX="430.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="50.0" prefWidth="108.0" style="-fx-background-color: #FCBB31;" text="Customer Mode" textFill="WHITE" />
+      <Button fx:id="btnAdmin" layoutX="250.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleClicks" style="-fx-background-color: blue;" text="Admin Mode" textFill="WHITE" />
    </children>
 </AnchorPane>

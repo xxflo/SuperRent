@@ -3,60 +3,62 @@ package ca.ubc.cs304.model;
 /**
  * Enumeration of vehicle type
  */
-public enum VehicleType {
+public class VehicleType {
+    private final String vtname;
+    private final String features;
+    private final double wrate;
+    private final double drate;
+    private final double hrate;
+    private final double wirate;
+    private final double hirate;
+    private final double dirate;
+    private final double krate;
 
-    ECONOMY("Economy"),
-    COMPACT("Compact"),
-    MID_SIZE("Mid-size"),
-    STANDARD("Standard"),
-    FULL_SIZE("Full-size"),
-    SUV("SUV"),
-    TRUCK("Truck");
-
-    private final String value;
-
-    VehicleType(String value) {
-        this.value = value;
+    public VehicleType(String vtname, String features, double wrate, double drate, double hrate, double wirate, double dirate, double hirate, double krate) {
+        this.vtname = vtname;
+        this.features = features;
+        this.wrate = wrate;
+        this.drate = drate;
+        this.hrate = hrate;
+        this.wirate = wirate;
+        this.hirate = hirate;
+        this.dirate = dirate;
+        this.krate = krate;
     }
 
-    public String getValue(){return this.value;}
-
-    public static VehicleType getVehicleType(String type) {
-        switch (type) {
-            case "Economy":
-                return ECONOMY;
-            case "Compact":
-                return COMPACT;
-            case "Mid-size":
-                return MID_SIZE;
-            case "Standard":
-                return STANDARD;
-            case "Full-size":
-                return FULL_SIZE;
-            case "SUV":
-                return SUV;
-            case "Truck":
-                return TRUCK;
-            default:
-                return null;
-        }
+    public String getVtname() {
+        return vtname;
     }
 
-//    public final int wrate;
-//    public final int drate;
-//    public final int hrate;
-//    public final int wirate;
-//    public final int hirate;
-//    public final int krate;
-//
-//    VehicleType(int code, String value, int wrate, int drate, int hrate, int wirate, int hirate, int krate) {
-//        this.code = code;
-//        this.value = value;
-//        this.wrate = wrate;
-//        this.drate = drate;
-//        this.hrate = hrate;
-//        this.wirate = wirate;
-//        this.hirate = hirate;
-//        this.krate = krate;
-//    }
+    public String getFeatures() {
+        return features;
+    }
+
+    public double getWrate() {
+        return wrate;
+    }
+
+    public double getDrate() {
+        return drate;
+    }
+
+    public double getHrate() {
+        return hrate;
+    }
+
+    public double getWirate() {
+        return wirate;
+    }
+
+    public double getHirate() {
+        return hirate;
+    }
+
+    public double getKrate() {
+        return krate;
+    }
+
+    public double getDirate() {
+        return dirate;
+    }
 }

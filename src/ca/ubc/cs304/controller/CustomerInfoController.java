@@ -4,6 +4,7 @@ import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.Branch;
 import ca.ubc.cs304.model.Customer;
 import ca.ubc.cs304.model.VehicleType;
+import ca.ubc.cs304.model.VehicleTypeName;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +31,7 @@ public class CustomerInfoController implements Initializable {
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
     public Customer customer;
-    public VehicleType intendedVehicleType;
+    public VehicleTypeName intendedVehicleType;
 //    public Branch intendedBranch;
 
     @Override
@@ -81,12 +82,12 @@ public class CustomerInfoController implements Initializable {
         return dbHandler.insertCustomer(customer);
     }
 
-    void setIntendedVehicleType(VehicleType vehicleType){
+    void setIntendedVehicleType(VehicleTypeName vehicleType){
         this.intendedVehicleType = vehicleType;
         System.out.println(vehicleType);
     }
 
-    private void switchToReservation(ActionEvent actionEvent, VehicleType vehicleType, Customer customer) throws IOException {
+    private void switchToReservation(ActionEvent actionEvent, VehicleTypeName vehicleType, Customer customer) throws IOException {
         FXMLLoader loader = sceneSwitchUtil.getLoaderForScene(SceneSwitchUtil.reservationFxml);
         Parent root = loader.load();
 
