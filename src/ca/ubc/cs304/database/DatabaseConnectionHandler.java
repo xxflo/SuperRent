@@ -4,6 +4,9 @@ import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.util.LoginCreds;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -210,17 +213,27 @@ public class DatabaseConnectionHandler {
     // TODO: Fix Location and Time Filter
     public ArrayList<Vehicle> getVehiclesBasedOnOption(String carType, Branch branch, Timestamp startDateTime, Timestamp endDateTime) {
         ArrayList<Vehicle> result = new ArrayList<>();
-        String vTypeCrit = "", cityCrit="", locationCrit="";
+        String vTypeCrit = "", cityCrit="", locationCrit="", dateCrit="";
         String and = " AND ";
         try {
             Statement stmt = connection.createStatement();
-            String queryMain = "SELECT * FROM Vehicle LEFT JOIN Rent ON Vehicle.vlicense = Rent.vlicense WHERE";
-            vTypeCrit = carType.isEmpty()? " " : "vtname = " + carType + and + "";
+            String mainQuery = "SELECT * FROM VEHICLE V WHERE";
+            String subQuery = "NOT EXISTS (SELECT * FROM RENT R WHERE R.vlicense = V.vlicense";
+            vTypeCrit = carType.isEmpty()? " " : " vtname = '" + carType + "'" + and;
             cityCrit = "city = '" + branch.getCity() + "'";
             locationCrit = "location = '" + branch.getLocation() + "'";
-            String dateCrit = "(fromDateTime = null AND toDateTime = null)";
-            String dateCriteExtra = " OR (toDateTime < '" + startDateTime + "')";
-            String sql = queryMain + vTypeCrit + cityCrit + and + locationCrit;
+            if (startDateTime!=null && endDateTime!=null){
+                String endTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh:mi:ss.ff')", endDateTime);
+                String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh:mi:ss.ff')", startDateTime);
+                dateCrit = String.format(and + "(%1$s > R.fromDateTime AND %2$s < R.toDateTime))", endTimeQuery, startTimeQuery);
+            } else {
+                subQuery += ")";
+            }
+            
+            String sql = mainQuery + vTypeCrit + cityCrit + and +
+                    locationCrit + and +
+                    subQuery + dateCrit;
+            System.out.println("SQL for viewing available vehicles: " + sql);
 
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
