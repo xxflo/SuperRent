@@ -6,6 +6,6 @@ package ca.ubc.cs304.util;
  * ssh -l <username> -L localhost:1522:dbhost.students.cs.ubc.ca:1522 remote.students.cs.ubc.ca
  */
 public final class LoginCreds {
-    public static final String userName = "";
-    public static final String passWord = "";
+    public static final String userName = "ora_floris";
+    public static final String passWord = "a32747131";
 }

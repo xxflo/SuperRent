@@ -69,7 +69,6 @@ public class CustomerInfoController implements Initializable {
             newDriverLicense.setStyle("-fx-border-color: red");
             newCellNumber.setStyle("-fx-border-color: red");
             newName.setStyle("-fx-border-color: red");
-            customer = new Customer("test","test","test","test");
             switchToReservation(actionEvent,intendedVehicleType,customer);
         }
     }
