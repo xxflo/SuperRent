@@ -26,6 +26,41 @@ public class Vehicle {
         this.city = city;
         this.vtname = vtname;
         this.status = status;
+        this.color = color;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public VehicleStatus getStatus() {
+        return status;
+    }
+
+    public String getColor() { return color;}
+
+    public String getMake() {
+        return make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    @Override
+    public String toString(){
+        return "ID: " + licensePlate + "  " + make + "  " + model + "  " + year;
     }
 
     public String getVlicense() {
