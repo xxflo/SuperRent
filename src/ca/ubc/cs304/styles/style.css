@@ -1,6 +1,6 @@
 .text-input
 {
--fx-text-fill : #fff;
+-fx-text-fill : #000;
 }
 
 .root{
@@ -43,7 +43,17 @@
     -fx-text-fill:  #FFF;
 }
 
-.titled-pane > .title
-{
-    -fx-background-color: #6cb881;
+@font-face {
+    font-family: 'OpenSansEmoji';
+    src: url('OpenSansEmoji.ttf');
 }
+
+.test_font {
+    -fx-font-family: OpenSansEmoji;
+    -fx-font-size: 15;
+}
+
+/*.titled-pane > .title*/
+/*{*/
+/*    -fx-background-color: #888;*/
+/*}*/

@@ -3,31 +3,35 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.Customer;
 import ca.ubc.cs304.model.Reservation;
-import ca.ubc.cs304.model.VehicleType;
 import ca.ubc.cs304.model.VehicleTypeName;
 import ca.ubc.cs304.util.SceneSwitchUtil;
+import ca.ubc.cs304.util.TimeSpinnerUtil;
+import ca.ubc.cs304.util.TimeUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 public class ReservationController implements Initializable {
     public ComboBox<String> vehicleType;
-    public DatePicker startTime;
-    public DatePicker endTime;
     public Button btnConfirm;
     public Button btnCancel;
     public Label labelError;
+    public DatePicker startDate;
+    public DatePicker endDate;
+    public Spinner startTime;
+    public Spinner endTime;
+
     private Customer customer;
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
@@ -35,9 +39,11 @@ public class ReservationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Arrays.asList(VehicleTypeName.values()).forEach(item -> vehicleType.getItems().add(item.getName()));
+        startTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
+        endTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
     }
 
-    public void setCustomer(Customer customer) {
+    void setCustomer(Customer customer) {
         this.customer = customer;
         System.out.println(customer.getName());
     }
@@ -47,11 +53,22 @@ public class ReservationController implements Initializable {
         System.out.println(vehicleType);
     }
 
+    void setIntendedDateTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
+        this.startDate.setValue(startDate);
+        this.endDate.setValue(endDate);
+        this.startTime.getValueFactory().setValue(startTime);
+        this.endTime.getValueFactory().setValue(endTime);
+    }
+
     public void handleConfirmPressed(ActionEvent actionEvent) throws IOException {
         String confNo = String.valueOf(new Random().nextInt(100000));
-        VehicleTypeName selectedVehicleType = VehicleTypeName.getVehicleTypeName(vehicleType.getValue());
-        Reservation reservation = new Reservation(confNo, selectedVehicleType.getName(), customer.getLicense());
-        switchToConfirmation(actionEvent, reservation);
+        String selectedVehicleType = vehicleType.getValue();
+        if (startDate.getValue() == null || endDate.getValue() == null || startTime.getValue() == null || endTime.getValue() == null) {
+            labelError.setText("These fields cannot be null.");
+        }
+        Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
+        Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
+        Reservation reservation = new Reservation(confNo, selectedVehicleType, customer.getLicense(), startTimestamp, endTimestamp);
         boolean isReserveSuccess = makeReservation(reservation);
         if (isReserveSuccess){
             switchToConfirmation(actionEvent, reservation);

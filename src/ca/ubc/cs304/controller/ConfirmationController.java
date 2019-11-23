@@ -1,10 +1,6 @@
 package ca.ubc.cs304.controller;
-
-import ca.ubc.cs304.database.DatabaseConnectionHandler;
-import ca.ubc.cs304.model.Branch;
 import ca.ubc.cs304.model.Customer;
 import ca.ubc.cs304.model.Reservation;
-import ca.ubc.cs304.model.VehicleType;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -18,7 +14,6 @@ public class ConfirmationController implements Initializable {
     public Label confNum;
     public Label typeName;
     public Label date;
-    private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
 
     @Override
@@ -33,8 +28,7 @@ public class ConfirmationController implements Initializable {
         System.out.println(reservation.getConfNo());
         confNum.setText(String.valueOf(reservation.getConfNo()));
         typeName.setText(reservation.getVtname());
-        //TODO: fix this to be a date
-        date.setText("DD-MM-YYYY-TIME");
+        date.setText(reservation.getFromTime().toString() + reservation.getToTime().toString());
     }
 
     public void handleGoBackMainPressed(ActionEvent actionEvent) throws IOException {
