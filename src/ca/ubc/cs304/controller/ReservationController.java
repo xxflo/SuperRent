@@ -16,6 +16,8 @@ import javafx.scene.control.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -29,6 +31,7 @@ public class ReservationController implements Initializable {
     public DatePicker endDate;
     public Spinner startTime;
     public Spinner endTime;
+
     private Customer customer;
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
@@ -40,7 +43,7 @@ public class ReservationController implements Initializable {
         endTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
     }
 
-    public void setCustomer(Customer customer) {
+    void setCustomer(Customer customer) {
         this.customer = customer;
         System.out.println(customer.getName());
     }
@@ -50,13 +53,22 @@ public class ReservationController implements Initializable {
         System.out.println(vehicleType);
     }
 
+    void setIntendedDateTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
+        this.startDate.setValue(startDate);
+        this.endDate.setValue(endDate);
+        this.startTime.getValueFactory().setValue(startTime);
+        this.endTime.getValueFactory().setValue(endTime);
+    }
+
     public void handleConfirmPressed(ActionEvent actionEvent) throws IOException {
         String confNo = String.valueOf(new Random().nextInt(100000));
         String selectedVehicleType = vehicleType.getValue();
+        if (startDate.getValue() == null || endDate.getValue() == null || startTime.getValue() == null || endTime.getValue() == null) {
+            labelError.setText("These fields cannot be null.");
+        }
         Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
         Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
         Reservation reservation = new Reservation(confNo, selectedVehicleType, customer.getLicense(), startTimestamp, endTimestamp);
-        switchToConfirmation(actionEvent, reservation);
         boolean isReserveSuccess = makeReservation(reservation);
         if (isReserveSuccess){
             switchToConfirmation(actionEvent, reservation);

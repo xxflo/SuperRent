@@ -88,6 +88,7 @@ public class VehicleListController implements Initializable {
      * @param vehicleMap
      */
     private void showVehicles(HashMap<String, ArrayList<Vehicle>> vehicleMap) {
+        resultAccordion.getPanes().remove(0,resultAccordion.getPanes().size());
         ArrayList<TitledPane> panes = new ArrayList<>();
         for(String key : vehicleMap.keySet()){
             ArrayList<Vehicle> vehicles = vehicleMap.get(key);
@@ -137,6 +138,7 @@ public class VehicleListController implements Initializable {
 
         CustomerInfoController customerInfoController = loader.getController();
         customerInfoController.setIntendedVehicleType(VehicleTypeName.getVehicleTypeName(vehicleType));
+        customerInfoController.setIntendedDateTime(startDate.getValue(), endDate.getValue(), (LocalTime)startTime.getValue(), (LocalTime)endTime.getValue());
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);
     }

@@ -32,4 +32,8 @@ public class Reservation {
     public String getDriverLicense() {
         return driverLicense;
     }
+
+    public Timestamp getFromTime() { return fromTime; }
+
+    public Timestamp getToTime() { return toTime; }
 }
