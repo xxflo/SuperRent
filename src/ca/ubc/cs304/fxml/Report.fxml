@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.ReportController">
+   <children>
+      <Pane layoutX="14.0" layoutY="14.0" prefHeight="469.0" prefWidth="219.0">
+         <children>
+            <DatePicker fx:id="datePicker" layoutX="14.0" layoutY="38.0" promptText="Report Day" />
+            <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Daily Reports" />
+            <Button fx:id="dailyRentalAllBranch" layoutX="14.0" layoutY="143.0" mnemonicParsing="false" onAction="#handlePress" prefHeight="25.0" prefWidth="194.0" text="Daily Rentals (All Branches)" />
+            <Button fx:id="dailyRentalOneBranch" layoutX="14.0" layoutY="186.0" mnemonicParsing="false" onAction="#handlePress" prefHeight="25.0" prefWidth="194.0" text="Daily Rentals (Selected Branch)" />
+            <ComboBox fx:id="branchLocation" layoutX="19.0" layoutY="71.0" prefWidth="150.0" promptText="Branch" />
+            <Button fx:id="dailyReturnAllBranch" layoutX="14.0" layoutY="233.0" mnemonicParsing="false" onAction="#handlePress" prefHeight="25.0" prefWidth="194.0" text="Daily Returns (All Branches)" />
+            <Button fx:id="dailyReturnOneBranch" layoutX="14.0" layoutY="279.0" mnemonicParsing="false" onAction="#handlePress" prefHeight="25.0" prefWidth="194.0" text="Daily Returns (Selected Branch)" />
+         </children>
+      </Pane>
+      <Pane layoutX="236.0" layoutY="14.0" opacity="0.79" prefHeight="469.0" prefWidth="532.0" style="-fx-background-color: white;">
+         <children>
+            <ListView fx:id="perCategoryList" layoutX="14.0" layoutY="361.0" prefHeight="86.0" prefWidth="205.0" />
+            <ListView fx:id="perBranchList" layoutX="266.0" layoutY="361.0" prefHeight="86.0" prefWidth="232.0" />
+            <Text fx:id="perCategoryHeader" layoutX="14.0" layoutY="352.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rentals per category" wrappingWidth="205.0000011920929" />
+            <Text fx:id="perBranchHeader" layoutX="266.0" layoutY="352.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rentals per Branch" wrappingWidth="239.771484375" />
+            <Text fx:id="totalText" layoutX="14.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Rentals: " />
+            <ListView fx:id="aggregateList" layoutX="17.0" layoutY="14.0" prefHeight="282.0" prefWidth="491.0" />
+            <Text fx:id="errorText" fill="#ff4747" layoutX="51.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error Placeholder" visible="false" wrappingWidth="300.13671875">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

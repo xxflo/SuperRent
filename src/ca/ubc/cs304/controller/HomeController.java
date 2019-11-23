@@ -34,6 +34,7 @@ public class HomeController implements Initializable {
         }
         if (actionEvent.getSource() == btnClerk) {
             btnClerk.setStyle("-fx-background-color : #1620A1");
+            sceneSwitchUtil.switchSceneTo(actionEvent, SceneSwitchUtil.clerkFxml);
         }
         if (actionEvent.getSource() == btnAdmin) {
             btnCustomer.setStyle("-fx-background-color: #1620A1");
