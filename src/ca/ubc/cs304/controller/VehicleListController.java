@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -138,6 +139,7 @@ public class VehicleListController implements Initializable {
         CustomerInfoController customerInfoController = loader.getController();
         customerInfoController.setIntendedVehicleType(VehicleTypeName.getVehicleTypeName(vehicleType));
         customerInfoController.setIntendedDateTime(startDate.getValue(), endDate.getValue(), (LocalTime)startTime.getValue(), (LocalTime)endTime.getValue());
+        customerInfoController.setNextView(SceneSwitchUtil.reservationFxml);
         customerInfoController.setIntendedBranch(location);
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);

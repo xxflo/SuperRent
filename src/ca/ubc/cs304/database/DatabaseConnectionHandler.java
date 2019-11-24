@@ -2,6 +2,7 @@ package ca.ubc.cs304.database;
 
 import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.util.LoginCreds;
+import javafx.util.Pair;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -176,7 +177,8 @@ public class DatabaseConnectionHandler {
                         rs.getString("RID"),
                         rs.getInt("ODOMETER"),
                         rs.getBoolean("FULLTANK"),
-                        rs.getDouble("VALUE")
+                        rs.getDouble("VALUE"),
+                        rs.getTimestamp("return_dateTime")
                 );
                 result.add(branch);
             }
@@ -657,23 +659,18 @@ public class DatabaseConnectionHandler {
             String expiryDate
     ) {
         try {
+            connection.setAutoCommit(false);
             insertTimePeriodIfNotExist(startTime, endTime);
-            String rid = UUID.randomUUID().toString().substring(0, 10);
+            String rid = UUID.randomUUID().toString();
             String endTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", endTime);
             String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", startTime);
-            String vehicleSubquery =
-                    String.format(
-                            "SELECT * FROM Rent r " +
-                                    "WHERE r.vlicense = v.vlicense and (r.fromDateTime <= %4$s and r.toDateTime >= %5$s)",
-                            vehicleTypeName, location.getLocation(), location.getCity(), endTimeQuery, startTimeQuery);
-
 
             String sql = String.format(
                     "INSERT INTO RENT (rid, vlicense, dlicense, fromDateTime, toDateTime, odometer, cardName, cardNo, ExpDate) " +
                     "SELECT '%1$s', v.vlicense, '%2$s', %3$s, %4$s, v.odometer, '%5$s', '%6$s', '%7$s' " +
                     "FROM Vehicle v " +
-                    "WHERE NOT EXISTS (%8$s) " +
-                    "and v.vtname = '%9$s' and v.location = '%10$s' and v.city = '%11$s' " +
+                    "WHERE v.status = 'available' " +
+                    "and v.vtname = '%8$s' and v.location = '%9$s' and v.city = '%10$s' " +
                     "and rownum = 1",
                     rid,
                     customer.getLicense(),
@@ -682,7 +679,6 @@ public class DatabaseConnectionHandler {
                     creditCardName,
                     creditCardNumber,
                     expiryDate,
-                    vehicleSubquery,
                     vehicleTypeName.getName(),
                     location.getLocation(),
                     location.getCity());
@@ -690,10 +686,10 @@ public class DatabaseConnectionHandler {
             System.out.println("SQL for inserting new rental into table: " + sql);
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeUpdate();
-            connection.commit();
 
-            String fetchSql = String.format("SELECT * FROM RENT r WHERE r.rid = %1$s", rid);
-            System.out.println("SQL for inserting new rental into table: " + sql);
+
+            String fetchSql = String.format("SELECT * FROM RENT r WHERE r.rid = '%1$s'", rid);
+            System.out.println("SQL for fetch return: " + fetchSql);
             ps = connection.prepareStatement(fetchSql);
             ps.executeQuery(fetchSql);
             ResultSet rs = ps.getResultSet();
@@ -711,20 +707,187 @@ public class DatabaseConnectionHandler {
                         rs.getTimestamp("toDateTime")
                 );
                 ps.close();
+
+                String updateVehicleSql = String.format(
+                        "UPDATE VEHICLE " +
+                                "SET status = 'rented' " +
+                                "WHERE vlicense = '%1$s'",
+                        r.getVlicense());
+
+                System.out.println(String.format("Query to update vehicle: %s", updateVehicleSql));
+                ps = connection.prepareStatement(updateVehicleSql);
+                ps.executeUpdate();
+                connection.commit();
                 return r;
             }
-
-
             ps.close();
             return null;
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
             return null;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
+    public Rental getRental(
+            String vlicense,
+            String dlicense
+    ) {
+        try {
+            String sql = String.format("SELECT * FROM Rent r WHERE r.vlicense = %1$s and r.dlicense = %2$s ORDER BY r.fromDateTime DESC", vlicense, dlicense);
+            System.out.println(String.format("SQL for fetching rental: %1$s", sql));
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.executeQuery();
+            ResultSet rs = ps.getResultSet();
+
+            if (rs.next()) {
+                return new Rental(
+                        rs.getString("rid"),
+                        rs.getString("vlicense"),
+                        rs.getString("dlicense"),
+                        rs.getInt("odometer"),
+                        rs.getString("cardName"),
+                        rs.getString("cardNo"),
+                        rs.getString("expDate"),
+                        rs.getString("confNo"),
+                        rs.getTimestamp("fromDateTime"),
+                        rs.getTimestamp("toDateTime")
+                );
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public Pair<CostSummary, VehicleType> getCostSummary(
+            String rid,
+            int returnOdometer,
+            Timestamp returnTime
+    ) {
+        try {
+            String returnTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", returnTime);
+            String sql = String.format(
+                    "WITH returnSummary as (SELECT v.vtname as vtname, " +
+                            "EXTRACT(hour from %1$s - r.fromDateTime) as hoursBetween, " +
+                            "FLOOR(EXTRACT(day from %1$s - r.fromDateTime) / 7) as weeksBetween, " +
+                            "EXTRACT(day from %1$s - r.fromDateTime) - " +
+                            "FLOOR(EXTRACT(day from %1$s - r.fromDateTime) / 7) * 7 as daysBetween, " +
+                            "(%2$s - r.odometer) as odometerDifference " +
+                            "FROM Rent r, Vehicle v " +
+                            "WHERE r.rid = '%3$s' and r.vlicense = v.vlicense) " +
+                            "SELECT hoursBetween, weeksBetween, daysBetween, odometerDifference, " +
+                            "krate, hrate, drate, wrate, hirate, dirate, wirate, vt.vtname, vt.features, " +
+                            "(CASE WHEN odometerDifference > 2000 then odometerDifference * vt.krate ELSE 0 END) as kmPrice, " +
+                            "(CASE WHEN odometerDifference > 2000 then odometerDifference * vt.krate ELSE 0 END) + hoursBetween * hrate + hoursBetween * hirate + daysBetween * drate + daysBetween * dirate + weeksBetween * wrate + weeksBetween * wirate as returnValue " +
+                            "FROM VehicleType vt, returnSummary rs " +
+                            "WHERE vt.vtname = rs.vtname",
+                    returnTimeQuery, returnOdometer, rid);
+            System.out.println(String.format("SQL for generating cost for return: %s", sql));
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.executeQuery();
+
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                CostSummary c = new CostSummary(
+                        rs.getLong("daysBetween"),
+                        rs.getLong("hoursBetween"),
+                        rs.getLong("weeksBetween"),
+                        rs.getLong("odometerDifference"),
+                        rs.getLong("returnValue"),
+                        rs.getLong("kmPrice")
+                );
+
+                VehicleType vt = new VehicleType(
+                        rs.getString("vtname"),
+                        rs.getString("features"),
+                        rs.getDouble("wrate"),
+                        rs.getDouble("drate"),
+                        rs.getDouble("hrate"),
+                        rs.getDouble("wirate"),
+                        rs.getDouble("dirate"),
+                        rs.getDouble("hirate"),
+                        rs.getDouble("krate")
+                );
+                return new Pair(c, vt);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public Return createReturn(
+            long odometer,
+            boolean isGasFull,
+            Double value,
+            Rental rental,
+            Timestamp returnTime
+    ) {
+        try {
+            connection.setAutoCommit(false);
+            String gasFullSql = (isGasFull) ? "1" : "0";
+            String returnTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", returnTime);
+            String insertReturnSql = String.format("INSERT INTO RETURN VALUES('%1$s', %2$s, %3$s, '%4$s', %5$s)",
+            rental.getRid(), returnTimeQuery, odometer, gasFullSql, value);
+            PreparedStatement ps = connection.prepareStatement(insertReturnSql);
+            System.out.println(String.format("Query to insert rental: %s", insertReturnSql));
+            ps.executeUpdate();
+            String updateVehicleSql = String.format(
+                    "UPDATE VEHICLE " +
+                    "SET odometer = %1$s, " +
+                            "status = 'available' " +
+                            "WHERE vlicense = '%2$s'",
+                    odometer, rental.getVlicense());
+
+            System.out.println(String.format("Query to update vehicle: %s", updateVehicleSql));
+            ps = connection.prepareStatement(updateVehicleSql);
+            ps.executeUpdate();
+            connection.commit();
+
+            System.out.println(String.format("Query to fetch return: %s", updateVehicleSql));
+            String fetchReturnSql = String.format("SELECT * FROM RETURN WHERE rid = '%1$s'", rental.getRid());
+            ps = connection.prepareStatement(fetchReturnSql);
+            ps.executeQuery();
+
+            ResultSet rs = ps.getResultSet();
+
+            if (rs.next()) {
+                return new Return(
+                        rs.getString("rid"),
+                        rs.getInt("odometer"),
+                        rs.getBoolean("fullTank"),
+                        rs.getDouble("value"),
+                        rs.getTimestamp("return_dateTime")
+                );
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void rollbackConnection() {
         try  {
