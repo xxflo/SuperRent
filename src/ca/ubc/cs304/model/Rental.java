@@ -1,9 +1,11 @@
 package ca.ubc.cs304.model;
 
+import java.sql.Timestamp;
+
 /**
  * Store information about a single rental
  */
-public class Rental {
+public class Rental implements DateTimeModel {
     private final String rid;
     private final String vlicense;
     private final String dlicense;
@@ -12,8 +14,10 @@ public class Rental {
     private final String cardNo;
     private final String expDate;
     private final String confNo;
+    private final Timestamp fromDateTime;
+    private final Timestamp toDateTime;
 
-    public Rental(String rid, String vlicense, String dlicense, int odometer, String cardName, String cardNo, String expDate, String confNo) {
+    public Rental(String rid, String vlicense, String dlicense, int odometer, String cardName, String cardNo, String expDate, String confNo, Timestamp fromDateTime, Timestamp toDateTime) {
         this.rid = rid;
         this.vlicense = vlicense;
         this.dlicense = dlicense;
@@ -22,6 +26,8 @@ public class Rental {
         this.cardNo = cardNo;
         this.expDate = expDate;
         this.confNo = confNo;
+        this.fromDateTime = fromDateTime;
+        this.toDateTime = toDateTime;
     }
 
     public String getRid() {
@@ -54,5 +60,15 @@ public class Rental {
 
     public String getConfNo() {
         return confNo;
+    }
+
+    @Override
+    public Timestamp getStartTime() {
+        return fromDateTime;
+    }
+
+    @Override
+    public Timestamp getEndTime() {
+        return toDateTime;
     }
 }

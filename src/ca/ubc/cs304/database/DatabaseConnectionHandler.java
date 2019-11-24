@@ -6,6 +6,8 @@ import ca.ubc.cs304.util.LoginCreds;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 
 /**
@@ -105,7 +107,9 @@ public class DatabaseConnectionHandler {
                         rs.getString("CARDNAME"),
                         rs.getString("CARDNO"),
                         rs.getString("EXPDATE"),
-                        rs.getString("CONFNO")
+                        rs.getString("CONFNO"),
+                        rs.getTimestamp("FROMDATETIME"),
+                        rs.getTimestamp("TODATETIME")
                 );
                 result.add(rental);
             }
@@ -258,25 +262,23 @@ public class DatabaseConnectionHandler {
         return result;
     }
 
-    private void insertTimePeriodIfNotExist(Reservation reservation) {
+    private void insertTimePeriodIfNotExist(Timestamp startTime, Timestamp endTime) {
         try {
-            Timestamp fromTime = reservation.getFromTime();
-            Timestamp toTime = reservation.getToTime();
             String sql_select = "SELECT * FROM TimePeriod WHERE fromDateTime = ? AND toDateTime = ?";
 
             PreparedStatement ps = connection.prepareStatement(sql_select);
-            ps.setTimestamp(1, fromTime);
-            ps.setTimestamp(2, toTime);
+            ps.setTimestamp(1, startTime);
+            ps.setTimestamp(2, endTime);
 
             System.out.println("SQL for selecting TimePeriod with entry: " + sql_select);
-            System.out.println("With parameters: " + fromTime.toString() + ", " + toTime.toString());
+            System.out.println("With parameters: " + startTime.toString() + ", " + endTime.toString());
 
             ResultSet rs = ps.executeQuery();
             if (!rs.next()){
                 String sql_insert = "INSERT INTO TimePeriod VALUES (?,?)";
                 PreparedStatement ps2 = connection.prepareStatement(sql_insert);
-                ps2.setTimestamp(1, reservation.getFromTime());
-                ps2.setTimestamp(2, reservation.getToTime());
+                ps2.setTimestamp(1, startTime);
+                ps2.setTimestamp(2, endTime);
                 ps2.executeQuery();
                 ps2.close();
                 System.out.println("SQL for inserting new TimePeriod into table: " + sql_insert);
@@ -292,15 +294,14 @@ public class DatabaseConnectionHandler {
 
     public boolean insertReservation(Reservation reservation) {
         try {
-            insertTimePeriodIfNotExist(reservation);
-            String sql = "INSERT INTO Reservation VALUES (?,?,?,?,?,?,?)";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            insertTimePeriodIfNotExist(reservation.getStartTime(), reservation.getEndTime());
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Reservation VALUES (?,?,?,?,?,?)");
 
             ps.setString(1, reservation.getConfNo());
             ps.setString(2, reservation.getVtname());
             ps.setString(3, reservation.getDriverLicense());
-            ps.setTimestamp(4, reservation.getFromTime());
-            ps.setTimestamp(5, reservation.getToTime());
+            ps.setTimestamp(4, reservation.getStartTime());
+            ps.setTimestamp(5, reservation.getEndTime());
             ps.setString(6, reservation.getBranch().getLocation());
             ps.setString(7, reservation.getBranch().getCity());
 
@@ -643,6 +644,85 @@ public class DatabaseConnectionHandler {
             rollbackConnection();
             return 0;
         }
+    }
+
+    public Rental createRental(
+            Branch location,
+            VehicleTypeName vehicleTypeName,
+            Timestamp startTime,
+            Timestamp endTime,
+            Customer customer,
+            String creditCardName,
+            String creditCardNumber,
+            String expiryDate
+    ) {
+        try {
+            insertTimePeriodIfNotExist(startTime, endTime);
+            String rid = UUID.randomUUID().toString().substring(0, 10);
+            String endTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", endTime);
+            String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", startTime);
+            String vehicleSubquery =
+                    String.format(
+                            "SELECT * FROM Rent r " +
+                                    "WHERE r.vlicense = v.vlicense and (r.fromDateTime <= %4$s and r.toDateTime >= %5$s)",
+                            vehicleTypeName, location.getLocation(), location.getCity(), endTimeQuery, startTimeQuery);
+
+
+            String sql = String.format(
+                    "INSERT INTO RENT (rid, vlicense, dlicense, fromDateTime, toDateTime, odometer, cardName, cardNo, ExpDate) " +
+                    "SELECT '%1$s', v.vlicense, '%2$s', %3$s, %4$s, v.odometer, '%5$s', '%6$s', '%7$s' " +
+                    "FROM Vehicle v " +
+                    "WHERE NOT EXISTS (%8$s) " +
+                    "and v.vtname = '%9$s' and v.location = '%10$s' and v.city = '%11$s' " +
+                    "and rownum = 1",
+                    rid,
+                    customer.getLicense(),
+                    startTimeQuery,
+                    endTimeQuery,
+                    creditCardName,
+                    creditCardNumber,
+                    expiryDate,
+                    vehicleSubquery,
+                    vehicleTypeName.getName(),
+                    location.getLocation(),
+                    location.getCity());
+
+            System.out.println("SQL for inserting new rental into table: " + sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.executeUpdate();
+            connection.commit();
+
+            String fetchSql = String.format("SELECT * FROM RENT r WHERE r.rid = %1$s", rid);
+            System.out.println("SQL for inserting new rental into table: " + sql);
+            ps = connection.prepareStatement(fetchSql);
+            ps.executeQuery(fetchSql);
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                Rental r = new Rental(
+                        rs.getString("rid"),
+                        rs.getString("vlicense"),
+                        rs.getString("dlicense"),
+                        rs.getInt("odometer"),
+                        rs.getString("cardname"),
+                        rs.getString("cardNo"),
+                        rs.getString("expdate"),
+                        rs.getString("confno"),
+                        rs.getTimestamp("fromDateTime"),
+                        rs.getTimestamp("toDateTime")
+                );
+                ps.close();
+                return r;
+            }
+
+
+            ps.close();
+            return null;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+
     }
 
 

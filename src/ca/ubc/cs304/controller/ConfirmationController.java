@@ -35,8 +35,8 @@ public class ConfirmationController implements Initializable {
         location.setText(reservation.getBranch().toString());
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-            Date parsedStartDate = dateFormat.parse(reservation.getFromTime().toString());
-            Date parsedEndDate = dateFormat.parse(reservation.getToTime().toString());
+            Date parsedStartDate = dateFormat.parse(reservation.getStartTime().toString());
+            Date parsedEndDate = dateFormat.parse(reservation.getEndTime().toString());
             fromTime.setText(parsedStartDate.toString());
             toTime.setText(parsedEndDate.toString());
         } catch (ParseException e) {
