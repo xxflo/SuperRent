@@ -37,12 +37,13 @@ public class ReservationController implements Initializable {
 
     private Customer customer;
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
+    private BranchUtil branchUtil = BranchUtil.getInstance();
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Arrays.asList(VehicleTypeName.values()).forEach(item -> vehicleType.getItems().add(item.getName()));
-        branchLocation.getItems().addAll(BranchUtil.branchesToStringArray());
+        branchLocation.getItems().addAll(branchUtil.getAllBranchesAsStringArray());
         startTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
         endTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
     }

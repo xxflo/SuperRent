@@ -8,21 +8,17 @@ import ca.ubc.cs304.util.BranchUtil;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import ca.ubc.cs304.util.TimeSpinnerUtil;
 import ca.ubc.cs304.util.TimeUtil;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +38,7 @@ public class VehicleListController implements Initializable {
     public Spinner endTime;
     public Label labelError;
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
+    private BranchUtil branchUtil= BranchUtil.getInstance();
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
     private Branch location;
 
@@ -52,8 +49,8 @@ public class VehicleListController implements Initializable {
         vehicleType.getSelectionModel().select("");
         startTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
         endTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
-        branchLocation.getItems().addAll(BranchUtil.branchesToStringArray());
-        branchLocation.getSelectionModel().select(BranchUtil.VANCOUVER_A.toString());
+        branchLocation.getItems().addAll(branchUtil.getAllBranchesAsStringArray());
+        branchLocation.getSelectionModel().select(branchUtil.getDefaultBranchAsString());
     }
 
     public void handleSelectVehicleOptions() {

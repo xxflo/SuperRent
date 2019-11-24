@@ -34,6 +34,7 @@ public class ReportController implements Initializable {
     public Text errorText;
 
     private DatabaseConnectionHandler handler;
+    private BranchUtil branchUtil = BranchUtil.getInstance();
     private static final String RENT_TOTAL_TEXT = "Total Rentals: %s";
     private static final String RENT_PER_VEHICLE_TEXT = "Rentals per Category";
     private static final String RENT_PER_BRANCH_TEXT = "Rentals per Branch";
@@ -43,7 +44,7 @@ public class ReportController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        branchLocation.getItems().addAll(BranchUtil.branchesToStringArray());
+        branchLocation.getItems().addAll(branchUtil.getAllBranchesAsStringArray());
         datePicker.setValue(LocalDate.now());
         handler = DatabaseConnectionHandler.getInstance();
 

@@ -1,6 +1,5 @@
 package ca.ubc.cs304.util;
 
-import ca.ubc.cs304.model.Branch;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 
