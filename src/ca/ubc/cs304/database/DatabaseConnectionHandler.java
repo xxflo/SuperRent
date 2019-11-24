@@ -284,7 +284,7 @@ public class DatabaseConnectionHandler {
                 ps2.executeQuery();
                 ps2.close();
                 System.out.println("SQL for inserting new TimePeriod into table: " + sql_insert);
-                System.out.println("With parameters: " + fromTime.toString() + ", " + toTime.toString());
+                System.out.println("With parameters: " + startTime.toString() + ", " + endTime.toString());
             }
             rs.close();
             ps.close();
@@ -297,7 +297,8 @@ public class DatabaseConnectionHandler {
     public boolean insertReservation(Reservation reservation) {
         try {
             insertTimePeriodIfNotExist(reservation.getStartTime(), reservation.getEndTime());
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO Reservation VALUES (?,?,?,?,?,?)");
+            String sql = "INSERT INTO Reservation VALUES (?,?,?,?,?,?,?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, reservation.getConfNo());
             ps.setString(2, reservation.getVtname());
@@ -307,7 +308,6 @@ public class DatabaseConnectionHandler {
             ps.setString(6, reservation.getBranch().getLocation());
             ps.setString(7, reservation.getBranch().getCity());
 
-            //TODO: how to print ps as string
             System.out.println("SQL for inserting new reservation into table: " + sql);
             System.out.println("With parameters: " + reservation.toString());
 

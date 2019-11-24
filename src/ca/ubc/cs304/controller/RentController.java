@@ -63,7 +63,7 @@ public class RentController implements Initializable {
         withoutReservationInputPane.setVisible(true);
         withReservationInputPane.setVisible(false);
         Arrays.asList(VehicleTypeName.values()).forEach(item -> vehicleTypePicker.getItems().add(item.getName()));
-        locationPicker.getItems().addAll(BranchUtil.branchesToStringArray());
+        locationPicker.getItems().addAll(BranchUtil.getInstance().getAllBranchesAsStringArray());
         startTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
         endTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
         returnTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
