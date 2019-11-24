@@ -365,30 +365,36 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public List<RentalAggregate> getDailyRentalAggregate(Date date, Branch branch) {
+    public List<RentalDetailAggregate> getDailyRentalAggregate(Date date, Branch branch) {
         try {
+            String filterBranchClause = "";
+            if (branch != null) {
+                filterBranchClause = String.format("and v.location = '%1$s' and v.city = '%2$s' ", branch.getLocation(), branch.getCity());
+            }
             String sql =
-                    "SELECT v.location, v.city, v.vtname, COUNT(r.rid) as rentCount " +
+                    "SELECT v.location, v.city, v.vtname, v.vlicense, v.make, v.model, v.year, v.color " +
                             "FROM RENT r, VEHICLE v " +
                             "WHERE r.vlicense = v.vlicense " +
+                            filterBranchClause +
                             String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
-                            "GROUP BY (v.location, v.city, v.vtname)";
-            if (branch != null) {
-                String havingClause = String.format("HAVING v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
-                sql = sql + " " + havingClause;
-            }
+                            "ORDER BY v.city, v.location, v.vtname";
+
             PreparedStatement ps = connection.prepareStatement(sql);
 
             System.out.println("SQL for daily rental aggregate: " + sql);
             ResultSet rs = ps.executeQuery();
 
-            List<RentalAggregate> aggregates = new ArrayList<>();
+            List<RentalDetailAggregate> aggregates = new ArrayList<>();
             while (rs.next()) {
                 String branchLocation = rs.getString("location");
                 String branchCity = rs.getString("city");
                 VehicleTypeName vtName = VehicleTypeName.getVehicleTypeName(rs.getString("vtname"));
-                int count = rs.getInt("rentcount");
-                aggregates.add(new RentalAggregate(branchCity, branchLocation, vtName, count));
+                String vlicense = rs.getString("vlicense");
+                String make = rs.getString("make");
+                String model = rs.getString("model");
+                String year = rs.getString("year");
+                String color = rs.getString("color");
+                aggregates.add(new RentalDetailAggregate(branchCity, branchLocation, vtName, vlicense, make, model, year, color));
             }
 
             return aggregates;
@@ -495,33 +501,38 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public List<ReturnAggregate> getDailyReturnAggregate(Date date, Branch branch) {
+    public List<ReturnDetailAggregate> getDailyReturnAggregate(Date date, Branch branch) {
         try {
+            String filterBranchClause = "";
+            if (branch != null) {
+                filterBranchClause = String.format("and v.location = '%1$s' and v.city = '%2$s' ", branch.getLocation(), branch.getCity());
+            }
+
             String sql =
-                    "SELECT v.location, v.city, v.vtname, COUNT(ret.rid) as returnCount, SUM(ret.value) as totalValue " +
+                    "SELECT v.location, v.city, v.vtname, v.vlicense, v.make, v.model, v.year, v.color, ret.value " +
                             "FROM RENT rent, RETURN ret, VEHICLE v " +
                             "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid " +
+                            filterBranchClause +
                             String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
-                            "GROUP BY (v.location, v.city, v.vtname)";
-
-            if (branch != null) {
-                String havingClause = String.format("HAVING v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
-                sql = sql + havingClause;
-            }
+                            "ORDER BY v.city, v.location, v.vtname";
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
             System.out.println("SQL for daily return aggregate: " + sql);
             ResultSet rs = ps.executeQuery();
 
-            List<ReturnAggregate> aggregates = new ArrayList<>();
+            List<ReturnDetailAggregate> aggregates = new ArrayList<>();
             while (rs.next()) {
                 String branchLocation = rs.getString("location");
                 String branchCity = rs.getString("city");
                 VehicleTypeName vtName = VehicleTypeName.getVehicleTypeName(rs.getString("vtname"));
-                int count = rs.getInt("returnCount");
-                double value = rs.getDouble("totalValue");
-                aggregates.add(new ReturnAggregate(branchCity, branchLocation, vtName, count, value));
+                double value = rs.getDouble("value");
+                String vlicense = rs.getString("vlicense");
+                String make = rs.getString("make");
+                String model = rs.getString("model");
+                String year = rs.getString("year");
+                String color = rs.getString("color");
+                aggregates.add(new ReturnDetailAggregate(branchCity, branchLocation,  vtName, vlicense, make, model, year, color, value));
             }
 
             return aggregates;

@@ -100,7 +100,7 @@ public class ReportController implements Initializable {
     private void fetchReturnReport(Date date, Branch branch) {
         setReturnLabels();
         clearLists();
-        List<ReturnAggregate> aggregates = handler.getDailyReturnAggregate(date, branch);
+        List<ReturnDetailAggregate> aggregates = handler.getDailyReturnAggregate(date, branch);
         aggregateList.getItems().addAll(aggregates);
 
         List<ReturnAggregate> perCategoryAggregates = handler.getDailyReturnAggregateByCategory(date, branch);
@@ -121,7 +121,7 @@ public class ReportController implements Initializable {
     private void fetchRentalReport(Date date, Branch branch) {
         setRentLabels();
         clearLists();
-        List<RentalAggregate> aggregates = handler.getDailyRentalAggregate(date, branch);
+        List<RentalDetailAggregate> aggregates = handler.getDailyRentalAggregate(date, branch);
         aggregateList.getItems().addAll(aggregates);
 
         List<RentalAggregate> perCategoryAggregates = handler.getDailyRentalAggregateByVehicleType(date, branch);
