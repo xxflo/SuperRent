@@ -3,15 +3,19 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.util.BranchUtil;
+import ca.ubc.cs304.util.SceneSwitchUtil;
 import ca.ubc.cs304.util.TimeSpinnerUtil;
 import ca.ubc.cs304.util.TimeUtil;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -114,7 +118,33 @@ public class RentController implements Initializable {
         Return createdReturn = DatabaseConnectionHandler.getInstance().createReturn(
                 odometer, gasFull.isSelected(), prices.getKey(), existingRental, returnTimestamp);
 
+        try {
+            confirmReturn(event, createdReturn, prices.getValue(), customer, VehicleTypeName.getVehicleTypeName(cost.getValue().getVtname()), existingRental);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         System.out.println(prices.getKey());
+    }
+
+    private void confirmRent(ActionEvent e, Rental r, VehicleTypeName vtname, Branch b, Customer c) throws IOException {
+        FXMLLoader loader = SceneSwitchUtil.getInstance().getLoaderForScene(SceneSwitchUtil.confirmationFxml);
+        Parent root = loader.load();
+
+        ConfirmationController confirmationController = loader.getController();
+        confirmationController.setRental(r, vtname, b, c);
+
+        SceneSwitchUtil.getInstance().switchSceneTo(e,root);
+    }
+
+    private void confirmReturn(ActionEvent e, Return r, String receipt, Customer c, VehicleTypeName vtname, Rental rent) throws IOException {
+        FXMLLoader loader = SceneSwitchUtil.getInstance().getLoaderForScene(SceneSwitchUtil.confirmationFxml);
+        Parent root = loader.load();
+
+        ConfirmationController confirmationController = loader.getController();
+        confirmationController.setReturn(r, receipt, c, vtname, rent);
+
+        SceneSwitchUtil.getInstance().switchSceneTo(e,root);
     }
 
     private Pair<Double, String> processPrice(CostSummary summary, VehicleType vt) {
@@ -145,7 +175,7 @@ public class RentController implements Initializable {
                     vt.getHrate(), hoursBetween,
                     vt.getDrate(), daysBetween,
                     vt.getWrate(), weeksBetween,
-                    vt.getKrate(), odometerDiff);
+                    vt.getKrate(), odometerDiff - 2000);
             return new Pair(value, receipt);
         } else {
             String receipt = String.format("" +
@@ -238,7 +268,11 @@ public class RentController implements Initializable {
                     expiryDate
             );
 
-            System.out.println(r);
+            try {
+                confirmRent(event, r, vehicleTypeName, location, customer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

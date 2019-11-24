@@ -788,8 +788,8 @@ public class DatabaseConnectionHandler {
                             "WHERE r.rid = '%3$s' and r.vlicense = v.vlicense) " +
                             "SELECT hoursBetween, weeksBetween, daysBetween, odometerDifference, " +
                             "krate, hrate, drate, wrate, hirate, dirate, wirate, vt.vtname, vt.features, " +
-                            "(CASE WHEN odometerDifference > 2000 then odometerDifference * vt.krate ELSE 0 END) as kmPrice, " +
-                            "(CASE WHEN odometerDifference > 2000 then odometerDifference * vt.krate ELSE 0 END) + hoursBetween * hrate + hoursBetween * hirate + daysBetween * drate + daysBetween * dirate + weeksBetween * wrate + weeksBetween * wirate as returnValue " +
+                            "(CASE WHEN odometerDifference > 2000 then (odometerDifference - 2000) * vt.krate ELSE 0 END) as kmPrice, " +
+                            "(CASE WHEN odometerDifference > 2000 then (odometerDifference - 2000) * vt.krate ELSE 0 END) + hoursBetween * hrate + hoursBetween * hirate + daysBetween * drate + daysBetween * dirate + weeksBetween * wrate + weeksBetween * wirate as returnValue " +
                             "FROM VehicleType vt, returnSummary rs " +
                             "WHERE vt.vtname = rs.vtname",
                     returnTimeQuery, returnOdometer, rid);
