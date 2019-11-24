@@ -44,13 +44,13 @@ public class ReservationController implements Initializable {
     }
 
     void setCustomer(Customer customer) {
-        this.customer = customer;
-        System.out.println(customer.getName());
+        if (customer != null) {
+            this.customer = customer;
+        }
     }
 
     void setIntendedVehicleType(VehicleTypeName vehicleType){
         this.vehicleType.getSelectionModel().select(vehicleType.getName());
-        System.out.println(vehicleType);
     }
 
     void setIntendedDateTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
@@ -64,7 +64,7 @@ public class ReservationController implements Initializable {
         String confNo = String.valueOf(new Random().nextInt(100000));
         String selectedVehicleType = vehicleType.getValue();
         if (startDate.getValue() == null || endDate.getValue() == null || startTime.getValue() == null || endTime.getValue() == null) {
-            labelError.setText("These fields cannot be null.");
+            labelError.setText("You need to enter all the fields");
         }
         Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
         Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);

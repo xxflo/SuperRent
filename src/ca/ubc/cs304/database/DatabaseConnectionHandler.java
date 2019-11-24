@@ -79,8 +79,8 @@ public class DatabaseConnectionHandler {
                         rs.getString("confno"),
                         rs.getString("vtname"),
                         rs.getString("dlicense"),
-                        Timestamp.valueOf(rs.getString("fromDateTime")),
-                        Timestamp.valueOf(rs.getString("toDateTime")));
+                        rs.getTimestamp("fromDateTime"),
+                        rs.getTimestamp("toDateTime"));
                 result.add(reservation);
             }
         } catch (SQLException e) {
@@ -259,11 +259,11 @@ public class DatabaseConnectionHandler {
 
     public void insertTimePeriodIfNotExist(Reservation reservation) {
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM TimePeriod WHERE fromDateTime = (?) AND toDateTime = (?)");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM TimePeriod WHERE fromDateTime = ? AND toDateTime = ?");
             ps.setTimestamp(1, reservation.getFromTime());
             ps.setTimestamp(2, reservation.getToTime());
             ResultSet rs = ps.executeQuery();
-            if (!rs.first()){
+            if (!rs.next()){
                 PreparedStatement ps2 = connection.prepareStatement("INSERT INTO TimePeriod VALUES (?,?)");
                 ps2.setTimestamp(1, reservation.getFromTime());
                 ps2.setTimestamp(2, reservation.getToTime());

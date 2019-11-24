@@ -54,7 +54,6 @@ public class CustomerInfoController implements Initializable {
         } else {
             labelError.setText("Field cannot be empty");
             driverLicense.setStyle("-fx-border-color: red");
-            switchToReservation(actionEvent,intendedVehicleType,customer);
         }
     }
 
