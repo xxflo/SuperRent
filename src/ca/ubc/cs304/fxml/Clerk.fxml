@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.ClerkController">
+   <children>
+      <Button fx:id="reportButton" layoutX="154.0" layoutY="188.0" mnemonicParsing="false" onAction="#handlePress" prefHeight="54.0" prefWidth="112.0" style="-fx-background-color: #FCBB31;" text="Reports" textFill="WHITE" />
+      <Button fx:id="rentReturnButton" layoutX="321.0" layoutY="188.0" mnemonicParsing="false" onAction="#handlePress" prefHeight="54.0" prefWidth="112.0" style="-fx-background-color: #FCBB31;" text="Rent/Return" textFill="WHITE" />
+   </children>
+</AnchorPane>

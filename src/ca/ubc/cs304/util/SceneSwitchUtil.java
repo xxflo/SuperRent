@@ -16,6 +16,8 @@ public class SceneSwitchUtil {
     public static final String vehicleFxml = "../fxml/Vehicle.fxml";
     public static final String confirmationFxml = "../fxml/Confirmation.fxml";
     public static final String adminFxml = "../fxml/Admin.fxml";
+    public static final String clerkFxml = "../fxml/Clerk.fxml";
+    public static final String reportFxml = "../fxml/Report.fxml";
     private static SceneSwitchUtil switchUtil;
 
     private SceneSwitchUtil(){}

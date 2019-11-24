@@ -19,6 +19,9 @@ public class BranchUtil {
     }
 
     public static Branch decodeBranchFromString(String branch){
+        if (branch == null) {
+            return null;
+        }
         String[] values = branch.split(",");
         return new Branch(values[0], values[1]);
     }

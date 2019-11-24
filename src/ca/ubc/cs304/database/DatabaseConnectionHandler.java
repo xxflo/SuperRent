@@ -5,6 +5,7 @@ import ca.ubc.cs304.util.LoginCreds;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -345,6 +346,273 @@ public class DatabaseConnectionHandler {
             return false;
         }
     }
+
+    public List<RentalAggregate> getDailyRentalAggregate(Date date, Branch branch) {
+        try {
+            String sql =
+                    "SELECT v.location, v.city, v.vtname, COUNT(r.rid) as rentCount " +
+                            "FROM RENT r, VEHICLE v " +
+                            "WHERE r.vlicense = v.vlicense " +
+                            String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                            "GROUP BY (v.location, v.city, v.vtname)";
+            if (branch != null) {
+                String havingClause = String.format("HAVING v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
+                sql = sql + " " + havingClause;
+            }
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            System.out.println("SQL for daily rental aggregate: " + sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<RentalAggregate> aggregates = new ArrayList<>();
+            while (rs.next()) {
+                String branchLocation = rs.getString("location");
+                String branchCity = rs.getString("city");
+                VehicleTypeName vtName = VehicleTypeName.getVehicleTypeName(rs.getString("vtname"));
+                int count = rs.getInt("rentcount");
+                aggregates.add(new RentalAggregate(branchCity, branchLocation, vtName, count));
+            }
+
+            return aggregates;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public List<RentalAggregate> getDailyRentalAggregateByVehicleType(Date date, Branch branch) {
+        try {
+            String sql =
+                    "SELECT v.vtname, COUNT(r.rid) as rentCount " +
+                            "FROM RENT r, VEHICLE v " +
+                            "WHERE r.vlicense = v.vlicense " +
+                            String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD')", date);
+
+            if (branch != null) {
+                String branchClause = String.format("and v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
+                sql = sql + " " + branchClause;
+            }
+
+            sql = sql + " " + "GROUP BY v.vtname";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            System.out.println("SQL for daily rental aggregate by vehicle category: " + sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<RentalAggregate> aggregates = new ArrayList<>();
+            while (rs.next()) {
+                VehicleTypeName vtName = VehicleTypeName.getVehicleTypeName(rs.getString("vtname"));
+                int count = rs.getInt("rentcount");
+                aggregates.add(new RentalAggregate(null, null, vtName, count));
+            }
+
+            return aggregates;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public List<RentalAggregate> getDailyRentalAggregateByBranch(Date date, Branch branch) {
+        try {
+            String sql =
+                    "SELECT v.location, v.city, COUNT(r.rid) as rentCount " +
+                            "FROM RENT r, VEHICLE v " +
+                            "WHERE r.vlicense = v.vlicense " +
+                            String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                            "GROUP BY (v.location, v.city)";
+            if (branch != null) {
+                String havingClause = String.format("HAVING v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
+                sql = sql + " " + havingClause;
+            }
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            System.out.println("SQL for daily rental aggregate by branch: " + sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<RentalAggregate> aggregates = new ArrayList<>();
+            while (rs.next()) {
+                String branchLocation = rs.getString("location");
+                String branchCity = rs.getString("city");
+                int count = rs.getInt("rentcount");
+                aggregates.add(new RentalAggregate(branchCity, branchLocation, null, count));
+            }
+            return aggregates;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public int getDailyRentalCount(Date date, Branch branch) {
+        try {
+            String sql =
+                    "SELECT COUNT(r.rid) as rentCount " +
+                            "FROM RENT r, Vehicle v " +
+                            String.format("WHERE trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                            String.format("and r.vlicense = v.vlicense");
+
+            if (branch != null) {
+                String branchClause = String.format("and v.city = '%1$s' and v.location = '%2$s'", branch.getCity(), branch.getLocation());
+                sql = sql + " " + branchClause;
+            }
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            System.out.println("SQL for daily rental aggregate by branch: " + sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int count = rs.getInt("rentcount");
+                return count;
+            }
+            return 0;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return 0;
+        }
+    }
+
+    public List<ReturnAggregate> getDailyReturnAggregate(Date date, Branch branch) {
+        try {
+            String sql =
+                    "SELECT v.location, v.city, v.vtname, COUNT(ret.rid) as returnCount, SUM(ret.value) as totalValue " +
+                            "FROM RENT rent, RETURN ret, VEHICLE v " +
+                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid " +
+                            String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                            "GROUP BY (v.location, v.city, v.vtname)";
+
+            if (branch != null) {
+                String havingClause = String.format("HAVING v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
+                sql = sql + havingClause;
+            }
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            System.out.println("SQL for daily return aggregate: " + sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<ReturnAggregate> aggregates = new ArrayList<>();
+            while (rs.next()) {
+                String branchLocation = rs.getString("location");
+                String branchCity = rs.getString("city");
+                VehicleTypeName vtName = VehicleTypeName.getVehicleTypeName(rs.getString("vtname"));
+                int count = rs.getInt("returnCount");
+                double value = rs.getDouble("totalValue");
+                aggregates.add(new ReturnAggregate(branchCity, branchLocation, vtName, count, value));
+            }
+
+            return aggregates;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public List<ReturnAggregate> getDailyReturnAggregateByCategory(Date date, Branch branch) {
+        try {
+            String sql =
+                    "SELECT v.vtname, COUNT(ret.rid) as returnCount, SUM(ret.value) as totalValue " +
+                            "FROM RENT rent, RETURN ret, VEHICLE v " +
+                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid " +
+                            String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD')", date);
+
+            if (branch != null) {
+                String branchClause = String.format("and v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
+                sql = sql + " " + branchClause;
+            }
+
+            sql = sql + " " + "GROUP BY (v.vtname)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            System.out.println("SQL for daily return aggregate by vehicle category: " + sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<ReturnAggregate> aggregates = new ArrayList<>();
+            while (rs.next()) {
+                VehicleTypeName vtName = VehicleTypeName.getVehicleTypeName(rs.getString("vtname"));
+                int count = rs.getInt("returnCount");
+                double value = rs.getDouble("totalValue");
+                aggregates.add(new ReturnAggregate(null, null, vtName, count, value));
+            }
+
+            return aggregates;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public List<ReturnAggregate> getDailyReturnAggregateByBranch(Date date, Branch branch) {
+        try {
+            String sql =
+                    "SELECT v.location, v.city, COUNT(ret.rid) as returnCount, SUM(ret.value) as totalValue " +
+                            "FROM RENT rent, RETURN ret, VEHICLE v " +
+                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid " +
+                            String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                            "GROUP BY (v.location, v.city)";
+
+            if (branch != null) {
+                String havingClause = String.format("HAVING v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
+                sql = sql + havingClause;
+            }
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            System.out.println("SQL for daily return aggregate by branch: " + sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<ReturnAggregate> aggregates = new ArrayList<>();
+            while (rs.next()) {
+                String branchLocation = rs.getString("location");
+                String branchCity = rs.getString("city");
+                int count = rs.getInt("returnCount");
+                double value = rs.getDouble("totalValue");
+                aggregates.add(new ReturnAggregate(branchCity, branchLocation, null, count, value));
+            }
+
+            return aggregates;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public double getDailyReturnValue(Date date, Branch branch) {
+        try {
+            String sql =
+                    "SELECT SUM(ret.value) as returnValue " +
+                            "FROM RETURN ret, RENT rent, Vehicle v " +
+                            String.format("WHERE trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD')", date) +
+                            " and ret.rid = rent.rid";
+
+            if (branch != null) {
+                String branchClause = String.format("and v.city = '%1$s' and v.location = '%2$s'", branch.getCity(), branch.getLocation());
+                sql = sql + " " + branchClause;
+            }
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            System.out.println("SQL for daily rental aggregate by branch: " + sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                double count = rs.getDouble("returnValue");
+                return count;
+            }
+            return 0;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return 0;
+        }
+    }
+
 
     private void rollbackConnection() {
         try  {
