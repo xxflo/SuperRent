@@ -34,6 +34,7 @@ public class ReportController implements Initializable {
     public Text errorText;
 
     private DatabaseConnectionHandler handler;
+    private BranchUtil branchUtil = BranchUtil.getInstance();
     private static final String RENT_TOTAL_TEXT = "Total Rentals: %s";
     private static final String RENT_PER_VEHICLE_TEXT = "Rentals per Category";
     private static final String RENT_PER_BRANCH_TEXT = "Rentals per Branch";
@@ -43,11 +44,11 @@ public class ReportController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        branchLocation.getItems().addAll(BranchUtil.branchesToStringArray());
+        branchLocation.getItems().addAll(branchUtil.getAllBranchesAsStringArray());
         datePicker.setValue(LocalDate.now());
         handler = DatabaseConnectionHandler.getInstance();
 
-        Callback<ListView<Aggregate>, ListCell<Aggregate>> factory = param -> new ListCell<>() {
+        Callback<ListView<Aggregate>, ListCell<Aggregate>> factory = param -> new ListCell<Aggregate>() {
             @Override
             protected void updateItem(Aggregate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -100,7 +101,7 @@ public class ReportController implements Initializable {
     private void fetchReturnReport(Date date, Branch branch) {
         setReturnLabels();
         clearLists();
-        List<ReturnAggregate> aggregates = handler.getDailyReturnAggregate(date, branch);
+        List<ReturnDetailAggregate> aggregates = handler.getDailyReturnAggregate(date, branch);
         aggregateList.getItems().addAll(aggregates);
 
         List<ReturnAggregate> perCategoryAggregates = handler.getDailyReturnAggregateByCategory(date, branch);
@@ -121,7 +122,7 @@ public class ReportController implements Initializable {
     private void fetchRentalReport(Date date, Branch branch) {
         setRentLabels();
         clearLists();
-        List<RentalAggregate> aggregates = handler.getDailyRentalAggregate(date, branch);
+        List<RentalDetailAggregate> aggregates = handler.getDailyRentalAggregate(date, branch);
         aggregateList.getItems().addAll(aggregates);
 
         List<RentalAggregate> perCategoryAggregates = handler.getDailyRentalAggregateByVehicleType(date, branch);

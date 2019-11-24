@@ -1,9 +1,11 @@
 package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
+import ca.ubc.cs304.model.Branch;
 import ca.ubc.cs304.model.Customer;
 import ca.ubc.cs304.model.Reservation;
 import ca.ubc.cs304.model.VehicleTypeName;
+import ca.ubc.cs304.util.BranchUtil;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import ca.ubc.cs304.util.TimeSpinnerUtil;
 import ca.ubc.cs304.util.TimeUtil;
@@ -19,11 +21,12 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class ReservationController implements Initializable {
     public ComboBox<String> vehicleType;
+    public ComboBox<String> branchLocation;
     public Button btnConfirm;
     public Button btnCancel;
     public Label labelError;
@@ -34,11 +37,13 @@ public class ReservationController implements Initializable {
 
     private Customer customer;
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
+    private BranchUtil branchUtil = BranchUtil.getInstance();
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Arrays.asList(VehicleTypeName.values()).forEach(item -> vehicleType.getItems().add(item.getName()));
+        branchLocation.getItems().addAll(branchUtil.getAllBranchesAsStringArray());
         startTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
         endTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
     }
@@ -53,6 +58,10 @@ public class ReservationController implements Initializable {
         this.vehicleType.getSelectionModel().select(vehicleType.getName());
     }
 
+    void setIntendedBranch(Branch branch) {
+        branchLocation.getSelectionModel().select(branch.toString());
+    }
+
     void setIntendedDateTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
         this.startDate.setValue(startDate);
         this.endDate.setValue(endDate);
@@ -61,19 +70,33 @@ public class ReservationController implements Initializable {
     }
 
     public void handleConfirmPressed(ActionEvent actionEvent) throws IOException {
-        String confNo = String.valueOf(new Random().nextInt(100000));
+        String confNo = String.valueOf(UUID.randomUUID());
         String selectedVehicleType = vehicleType.getValue();
-        if (startDate.getValue() == null || endDate.getValue() == null || startTime.getValue() == null || endTime.getValue() == null) {
-            labelError.setText("You need to enter all the fields");
-        }
-        Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
-        Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
-        Reservation reservation = new Reservation(confNo, selectedVehicleType, customer.getLicense(), startTimestamp, endTimestamp);
-        boolean isReserveSuccess = makeReservation(reservation);
-        if (isReserveSuccess){
-            switchToConfirmation(actionEvent, reservation);
+        if (startDate.getValue() == null || endDate.getValue() == null
+                || startTime.getValue() == null || endTime.getValue() == null) {
+            labelError.setText("You need to enter all the fields.");
         } else {
-            labelError.setText("Reservation is not successful. Please modify your criteria.");
+            Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
+            Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
+            if ((startTimestamp != null && endTimestamp == null) ||
+                    (startTimestamp == null && endTimestamp != null) ||
+                    (startTimestamp != null && endTimestamp != null
+                            && (startTimestamp.after(endTimestamp)))){
+                labelError.setText("Please enter valid date range and (optionally) time.");
+            }  else {
+                Reservation reservation = new Reservation(confNo,
+                        selectedVehicleType,
+                        customer.getLicense(),
+                        startTimestamp,
+                        endTimestamp,
+                        BranchUtil.decodeBranchFromString(branchLocation.getValue()));
+                boolean isReserveSuccess = makeReservation(reservation);
+                if (isReserveSuccess){
+                    switchToConfirmation(actionEvent, reservation);
+                } else {
+                    labelError.setText("Reservation is not successful. Please modify your criteria.");
+                }
+            }
         }
     }
 
@@ -91,7 +114,6 @@ public class ReservationController implements Initializable {
 
         ConfirmationController confirmationController = loader.getController();
         confirmationController.setReservation(reservation);
-        confirmationController.setCustomer(customer);
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);
     }

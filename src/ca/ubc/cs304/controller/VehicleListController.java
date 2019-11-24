@@ -8,21 +8,17 @@ import ca.ubc.cs304.util.BranchUtil;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import ca.ubc.cs304.util.TimeSpinnerUtil;
 import ca.ubc.cs304.util.TimeUtil;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,9 +36,11 @@ public class VehicleListController implements Initializable {
     public Accordion resultAccordion;
     public Spinner startTime;
     public Spinner endTime;
+    public Label labelError;
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
+    private BranchUtil branchUtil= BranchUtil.getInstance();
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
-    private ObservableList<ObservableList> data;
+    private Branch location;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -51,36 +49,38 @@ public class VehicleListController implements Initializable {
         vehicleType.getSelectionModel().select("");
         startTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
         endTime.setValueFactory(TimeSpinnerUtil.getSpinnerFactory());
-        branchLocation.getItems().addAll(BranchUtil.branchesToStringArray());
-        branchLocation.getSelectionModel().select(BranchUtil.VANCOUVER_A.toString());
+        branchLocation.getItems().addAll(branchUtil.getAllBranchesAsStringArray());
+        branchLocation.getSelectionModel().select(branchUtil.getDefaultBranchAsString());
     }
 
-    /**
-     * Trigger search based on options selected
-     * @param event
-     */
-    public void handleSelectVehicleOptions(MouseEvent event) {
+    public void handleSelectVehicleOptions() {
         String vType = vehicleType.getValue();
-        Branch location = BranchUtil.decodeBranchFromString(branchLocation.getValue());
+        location = BranchUtil.decodeBranchFromString(branchLocation.getValue());
         Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
         Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
 
-        ArrayList<Vehicle> vehicles = dbHandler.getVehiclesBasedOnOption(vType,location,startTimestamp,endTimestamp);
+        if ((startTimestamp != null && endTimestamp == null) ||
+                (startTimestamp == null && endTimestamp != null) ||
+                (startTimestamp != null && endTimestamp != null
+                        && (startTimestamp.after(endTimestamp)))){
+            labelError.setText("Please enter valid date range and (optionally) time.");
+        } else {
+            ArrayList<Vehicle> vehicles = dbHandler.getVehiclesBasedOnOption(vType,location,startTimestamp,endTimestamp);
 
-        HashMap<String,ArrayList<Vehicle>> vehicleMap = new HashMap<>();
+            HashMap<String,ArrayList<Vehicle>> vehicleMap = new HashMap<>();
 
-        for(Vehicle v:vehicles){
-            ArrayList<Vehicle> vehicleList = vehicleMap.get(v.getVtname());
-            if (vehicleList != null && vehicleList.size() > 0) {
-                vehicleList.add(v);
-            } else {
-                vehicleList = new ArrayList<>();
-                vehicleList.add(v);
-                vehicleMap.put(v.getVtname(),vehicleList);
+            for(Vehicle v:vehicles){
+                ArrayList<Vehicle> vehicleList = vehicleMap.get(v.getVtname());
+                if (vehicleList != null && vehicleList.size() > 0) {
+                    vehicleList.add(v);
+                } else {
+                    vehicleList = new ArrayList<>();
+                    vehicleList.add(v);
+                    vehicleMap.put(v.getVtname(),vehicleList);
+                }
             }
+            showVehicles(vehicleMap);
         }
-
-        showVehicles(vehicleMap);
     }
 
     /**
@@ -109,7 +109,6 @@ public class VehicleListController implements Initializable {
 
             ListView listView = new ListView();
             btnReserve.setOnAction((event)->{
-                System.out.println("Reserve Button Clicked");
                 try {
                     switchToCustomerInfo(event, key);
                 } catch (IOException e) {
@@ -139,6 +138,7 @@ public class VehicleListController implements Initializable {
         CustomerInfoController customerInfoController = loader.getController();
         customerInfoController.setIntendedVehicleType(VehicleTypeName.getVehicleTypeName(vehicleType));
         customerInfoController.setIntendedDateTime(startDate.getValue(), endDate.getValue(), (LocalTime)startTime.getValue(), (LocalTime)endTime.getValue());
+        customerInfoController.setIntendedBranch(location);
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);
     }

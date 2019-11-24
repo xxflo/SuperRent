@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.ConfirmationController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.ConfirmationController">
    <children>
        <Pane prefHeight="500.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
            <Label alignment="CENTER" layoutX="230.0" layoutY="80.0" prefHeight="23.0" text="Your Reservation is Confirmed!" textFill="#000">
@@ -12,49 +14,57 @@
                    <Font name="American Typewriter" size="25.0" />
                </font>
            </Label>
-           <Label layoutX="100.0" layoutY="150.0" prefHeight="32.0" prefWidth="354.0" text="Confirmation Number: ">
+           <Label layoutX="123.0" layoutY="148.0" prefHeight="32.0" prefWidth="354.0" text="Confirmation Number: " textAlignment="RIGHT">
                <font>
                    <Font name="American Typewriter" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="confNum" layoutX="310.0" layoutY="150.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="confNum" layoutX="331.0" layoutY="148.0" prefHeight="32.0" prefWidth="443.0">
+               <font>
+                   <Font name="ACaslonPro-Regular" size="18.0" />
+               </font>
+           </Label>
+           <Label layoutX="198.0" layoutY="188.0" prefHeight="32.0" prefWidth="354.0" text="Vehicle Type:" textAlignment="RIGHT">
                <font>
                    <Font name="American Typewriter" size="18.0" />
                </font>
            </Label>
-           <Label layoutX="100.0" layoutY="200.0" prefHeight="32.0" prefWidth="354.0" text="Vehicle Type:">
+           <Label fx:id="typeName" layoutX="331.0" layoutY="188.0" prefHeight="32.0" prefWidth="354.0">
+               <font>
+                   <Font name="ACaslonPro-Regular" size="18.0" />
+               </font>
+           </Label>
+           <Label layoutX="258.0" layoutY="224.0" prefHeight="32.0" prefWidth="354.0" text="From: " textAlignment="RIGHT">
                <font>
                    <Font name="American Typewriter" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="typeName" layoutX="310.0" layoutY="200.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="fromTime" layoutX="331.0" layoutY="224.0" prefHeight="32.0" prefWidth="354.0" textAlignment="RIGHT">
+               <font>
+                   <Font name="ACaslonPro-Regular" size="18.0" />
+               </font>
+           </Label>
+           <Label layoutX="282.0" layoutY="262.0" prefHeight="32.0" prefWidth="354.0" text="To: " textAlignment="RIGHT">
                <font>
                    <Font name="American Typewriter" size="18.0" />
                </font>
            </Label>
-           <Label layoutX="100.0" layoutY="250.0" prefHeight="32.0" prefWidth="354.0" text="From: ">
+           <Label fx:id="toTime" layoutX="331.0" layoutY="262.0" prefHeight="32.0" prefWidth="354.0" textAlignment="RIGHT">
                <font>
-                   <Font name="American Typewriter" size="18.0" />
+                   <Font name="ACaslonPro-Regular" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="fromTime" layoutX="310.0" layoutY="250.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+         <Label layoutX="229.0" layoutY="298.0" prefHeight="32.0" prefWidth="354.0" text="Location:" textAlignment="RIGHT">
+            <font>
+               <Font name="American Typewriter" size="18.0" />
+            </font>
+         </Label>
+           <Label fx:id="location" layoutX="332.0" layoutY="298.0" prefHeight="32.0" prefWidth="354.0" textAlignment="RIGHT">
                <font>
-                   <Font name="American Typewriter" size="18.0" />
+                   <Font name="ACaslonPro-Regular" size="18.0" />
                </font>
            </Label>
-           <Label layoutX="100.0" layoutY="300.0" prefHeight="32.0" prefWidth="354.0" text="To: ">
-               <font>
-                   <Font name="American Typewriter" size="18.0" />
-               </font>
-           </Label>
-           <Label fx:id="toTime" layoutX="310.0" layoutY="300.0" prefHeight="32.0" prefWidth="354.0" text=" ">
-               <font>
-                   <Font name="American Typewriter" size="18.0" />
-               </font>
-           </Label>
-           <Button fx:id="btnGoBackHome" layoutX="350.0" layoutY="370.0" mnemonicParsing="false" prefHeight="50.0"
-                   prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page"
-                   onAction="#handleGoBackMainPressed"/>
+           <Button fx:id="btnGoBackHome" layoutX="332.0" layoutY="370.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="50.0" prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
        </Pane>
    </children>
 </AnchorPane>
