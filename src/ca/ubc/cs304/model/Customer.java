@@ -31,4 +31,13 @@ public class Customer {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString(){
+        return "(" + (phoneNum.isEmpty() ? "\'\', " : phoneNum + ", ")
+                + (name.isEmpty() ? "\'\', " : name + ", ")
+                + (address.isEmpty() ? "\'\', " : address + ", ")
+                + (license.isEmpty() ? "\'\', " : license)
+                + ")";
+    }
 }

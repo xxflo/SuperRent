@@ -10,6 +10,9 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class ConfirmationController implements Initializable {
@@ -25,15 +28,20 @@ public class ConfirmationController implements Initializable {
     }
 
     public void setCustomer(Customer customer) {
-        System.out.println(customer.getName());
     }
 
     void setReservation(Reservation reservation) {
-        System.out.println(reservation.getConfNo());
         confNum.setText(String.valueOf(reservation.getConfNo()));
         typeName.setText(reservation.getVtname());
-        fromTime.setText(reservation.getFromTime().toString());
-        toTime.setText(reservation.getToTime().toString());
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            Date parsedStartDate = dateFormat.parse(reservation.getFromTime().toString());
+            Date parsedEndDate = dateFormat.parse(reservation.getToTime().toString());
+            fromTime.setText(parsedStartDate.toString());
+            toTime.setText(parsedEndDate.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void handleGoBackMainPressed(ActionEvent actionEvent) throws IOException {

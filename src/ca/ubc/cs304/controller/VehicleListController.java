@@ -109,7 +109,6 @@ public class VehicleListController implements Initializable {
 
             ListView listView = new ListView();
             btnReserve.setOnAction((event)->{
-                System.out.println("Reserve Button Clicked");
                 try {
                     switchToCustomerInfo(event, key);
                 } catch (IOException e) {

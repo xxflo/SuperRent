@@ -47,7 +47,7 @@ public class ReportController implements Initializable {
         datePicker.setValue(LocalDate.now());
         handler = DatabaseConnectionHandler.getInstance();
 
-        Callback<ListView<Aggregate>, ListCell<Aggregate>> factory = param -> new ListCell<>() {
+        Callback<ListView<Aggregate>, ListCell<Aggregate>> factory = param -> new ListCell<Aggregate>() {
             @Override
             protected void updateItem(Aggregate item, boolean empty) {
                 super.updateItem(item, empty);

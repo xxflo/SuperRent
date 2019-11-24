@@ -36,7 +36,6 @@ public class CustomerInfoController implements Initializable {
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
     private Customer customer;
     private VehicleTypeName intendedVehicleType;
-//    public Branch intendedBranch;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -48,7 +47,6 @@ public class CustomerInfoController implements Initializable {
             if (customer == null) {
                 labelError.setText("Customer does not exist. Try again or sign up instead.");
             } else {
-                System.out.println("Customer's driver license is:" + customer.getLicense());
                 switchToReservation(actionEvent,intendedVehicleType,customer);
             }
         } else {
@@ -86,7 +84,6 @@ public class CustomerInfoController implements Initializable {
 
     void setIntendedVehicleType(VehicleTypeName vehicleType){
         this.intendedVehicleType = vehicleType;
-        System.out.println(vehicleType);
     }
 
     void setIntendedDateTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){

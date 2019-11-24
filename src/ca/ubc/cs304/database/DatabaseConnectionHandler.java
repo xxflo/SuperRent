@@ -257,18 +257,29 @@ public class DatabaseConnectionHandler {
         return result;
     }
 
-    public void insertTimePeriodIfNotExist(Reservation reservation) {
+    private void insertTimePeriodIfNotExist(Reservation reservation) {
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM TimePeriod WHERE fromDateTime = ? AND toDateTime = ?");
-            ps.setTimestamp(1, reservation.getFromTime());
-            ps.setTimestamp(2, reservation.getToTime());
+            Timestamp fromTime = reservation.getFromTime();
+            Timestamp toTime = reservation.getToTime();
+            String sql_select = "SELECT * FROM TimePeriod WHERE fromDateTime = ? AND toDateTime = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql_select);
+            ps.setTimestamp(1, fromTime);
+            ps.setTimestamp(2, toTime);
+
+            System.out.println("SQL for selecting TimePeriod with entry: " + sql_select);
+            System.out.println("With parameters: " + fromTime.toString() + ", " + toTime.toString());
+
             ResultSet rs = ps.executeQuery();
             if (!rs.next()){
-                PreparedStatement ps2 = connection.prepareStatement("INSERT INTO TimePeriod VALUES (?,?)");
+                String sql_insert = "INSERT INTO TimePeriod VALUES (?,?)";
+                PreparedStatement ps2 = connection.prepareStatement(sql_insert);
                 ps2.setTimestamp(1, reservation.getFromTime());
                 ps2.setTimestamp(2, reservation.getToTime());
                 ps2.executeQuery();
                 ps2.close();
+                System.out.println("SQL for inserting new TimePeriod into table: " + sql_insert);
+                System.out.println("With parameters: " + fromTime.toString() + ", " + toTime.toString());
             }
             rs.close();
             ps.close();
@@ -281,7 +292,8 @@ public class DatabaseConnectionHandler {
     public boolean insertReservation(Reservation reservation) {
         try {
             insertTimePeriodIfNotExist(reservation);
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO Reservation VALUES (?,?,?,?,?)");
+            String sql = "INSERT INTO Reservation VALUES (?,?,?,?,?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, reservation.getConfNo());
             ps.setString(2, reservation.getVtname());
@@ -290,7 +302,9 @@ public class DatabaseConnectionHandler {
             ps.setTimestamp(5, reservation.getToTime());
 
             //TODO: how to print ps as string
-            System.out.println("SQL for inserting new reservation into table: " + ps);
+            System.out.println("SQL for inserting new reservation into table: " + sql);
+            System.out.println("With parameters: " + reservation.toString());
+
             ps.executeUpdate();
             connection.commit();
 
@@ -306,10 +320,10 @@ public class DatabaseConnectionHandler {
     public Customer getCustomer(String driverLicense) {
         Customer customer = null;
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM customer WHERE dLicense = ?");
-            ps.setString(1, driverLicense);
+            String sql = "SELECT * FROM customer WHERE dLicense = " + driverLicense;
+            PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for getting customer with license: " + ps.toString());
+            System.out.println("SQL for getting customer with license: " + sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
@@ -329,13 +343,17 @@ public class DatabaseConnectionHandler {
 
     public boolean insertCustomer(Customer customer) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO customer VALUES (?,?,?,?)");
+            String sql = "INSERT INTO customer VALUES (?,?,?,?)";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, customer.getPhoneNum());
             ps.setString(2, customer.getName());
             ps.setString(3, customer.getAddress());
             ps.setString(4, customer.getLicense());
 
-            System.out.println("SQL for inserting new customer into table: " + ps.toString());
+            System.out.println("SQL for inserting new customer into table: " + sql);
+            System.out.println("With Parameters: " + customer.toString());
+
             ps.executeUpdate();
             connection.commit();
             ps.close();

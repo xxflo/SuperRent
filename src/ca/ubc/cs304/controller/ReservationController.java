@@ -64,16 +64,17 @@ public class ReservationController implements Initializable {
         String confNo = String.valueOf(new Random().nextInt(100000));
         String selectedVehicleType = vehicleType.getValue();
         if (startDate.getValue() == null || endDate.getValue() == null || startTime.getValue() == null || endTime.getValue() == null) {
-            labelError.setText("You need to enter all the fields");
-        }
-        Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
-        Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
-        Reservation reservation = new Reservation(confNo, selectedVehicleType, customer.getLicense(), startTimestamp, endTimestamp);
-        boolean isReserveSuccess = makeReservation(reservation);
-        if (isReserveSuccess){
-            switchToConfirmation(actionEvent, reservation);
+            labelError.setText("You need to enter all the fields.");
         } else {
-            labelError.setText("Reservation is not successful. Please modify your criteria.");
+            Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
+            Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
+            Reservation reservation = new Reservation(confNo, selectedVehicleType, customer.getLicense(), startTimestamp, endTimestamp);
+            boolean isReserveSuccess = makeReservation(reservation);
+            if (isReserveSuccess){
+                switchToConfirmation(actionEvent, reservation);
+            } else {
+                labelError.setText("Reservation is not successful. Please modify your criteria.");
+            }
         }
     }
 

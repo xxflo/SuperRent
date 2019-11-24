@@ -1,5 +1,6 @@
 package ca.ubc.cs304.model;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
@@ -36,4 +37,14 @@ public class Reservation {
     public Timestamp getFromTime() { return fromTime; }
 
     public Timestamp getToTime() { return toTime; }
+
+    @Override
+    public String toString(){
+        return "(" + (confNo.isEmpty() ? "\'\', " : confNo + ", ")
+                + (vtname.isEmpty() ? "\'\', " : vtname + ", ")
+                + (driverLicense.isEmpty() ? "\'\', " : driverLicense + ", ")
+                + (fromTime == null ? "\'\', " : fromTime.toString() + ", ")
+                + (toTime == null ? "\'\', " : toTime.toString())
+                + ")";
+    }
 }
