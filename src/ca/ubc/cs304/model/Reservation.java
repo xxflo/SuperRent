@@ -12,14 +12,16 @@ public class Reservation {
     private final String driverLicense;
     private final Timestamp fromTime;
     private final Timestamp toTime;
+    private final Branch branch;
 
 
-    public Reservation(String confNo, String vtname, String driverLicense, Timestamp fromTime, Timestamp toTime) {
+    public Reservation(String confNo, String vtname, String driverLicense, Timestamp fromTime, Timestamp toTime, Branch branch) {
         this.confNo = confNo;
         this.vtname = vtname;
         this.driverLicense = driverLicense;
         this.fromTime = fromTime;
         this.toTime = toTime;
+        this.branch = branch;
     }
 
     public String getConfNo() {
@@ -37,6 +39,8 @@ public class Reservation {
     public Timestamp getFromTime() { return fromTime; }
 
     public Timestamp getToTime() { return toTime; }
+
+    public Branch getBranch() {return branch;}
 
     @Override
     public String toString(){

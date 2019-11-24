@@ -80,7 +80,8 @@ public class DatabaseConnectionHandler {
                         rs.getString("vtname"),
                         rs.getString("dlicense"),
                         rs.getTimestamp("fromDateTime"),
-                        rs.getTimestamp("toDateTime"));
+                        rs.getTimestamp("toDateTime"),
+                        new Branch(rs.getString("location"),rs.getString("city")));
                 result.add(reservation);
             }
         } catch (SQLException e) {
@@ -292,7 +293,7 @@ public class DatabaseConnectionHandler {
     public boolean insertReservation(Reservation reservation) {
         try {
             insertTimePeriodIfNotExist(reservation);
-            String sql = "INSERT INTO Reservation VALUES (?,?,?,?,?)";
+            String sql = "INSERT INTO Reservation VALUES (?,?,?,?,?,?,?)";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, reservation.getConfNo());
@@ -300,6 +301,8 @@ public class DatabaseConnectionHandler {
             ps.setString(3, reservation.getDriverLicense());
             ps.setTimestamp(4, reservation.getFromTime());
             ps.setTimestamp(5, reservation.getToTime());
+            ps.setString(6, reservation.getBranch().getLocation());
+            ps.setString(7, reservation.getBranch().getCity());
 
             //TODO: how to print ps as string
             System.out.println("SQL for inserting new reservation into table: " + sql);

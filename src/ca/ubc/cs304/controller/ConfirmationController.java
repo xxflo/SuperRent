@@ -1,4 +1,5 @@
 package ca.ubc.cs304.controller;
+import ca.ubc.cs304.model.Branch;
 import ca.ubc.cs304.model.Customer;
 import ca.ubc.cs304.model.Reservation;
 import ca.ubc.cs304.util.SceneSwitchUtil;
@@ -20,6 +21,7 @@ public class ConfirmationController implements Initializable {
     public Label typeName;
     public Label fromTime;
     public Label toTime;
+    public Label location;
     public Button btnGoBackHome;
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
 
@@ -27,12 +29,10 @@ public class ConfirmationController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void setCustomer(Customer customer) {
-    }
-
     void setReservation(Reservation reservation) {
         confNum.setText(String.valueOf(reservation.getConfNo()));
         typeName.setText(reservation.getVtname());
+        location.setText(reservation.getBranch().toString());
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
             Date parsedStartDate = dateFormat.parse(reservation.getFromTime().toString());

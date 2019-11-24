@@ -1,6 +1,7 @@
 package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
+import ca.ubc.cs304.model.Branch;
 import ca.ubc.cs304.model.Customer;
 import ca.ubc.cs304.model.VehicleTypeName;
 import ca.ubc.cs304.util.SceneSwitchUtil;
@@ -28,10 +29,11 @@ public class CustomerInfoController implements Initializable {
     public Button btnSignUp;
     public Label labelError;
     public Label newLabelError;
-    public LocalDate startDay;
-    public LocalDate endDay;
-    public LocalTime startT;
-    public LocalTime endT;
+    private LocalDate startDay;
+    private LocalDate endDay;
+    private LocalTime startT;
+    private LocalTime endT;
+    private Branch branch;
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
     private Customer customer;
@@ -101,7 +103,12 @@ public class CustomerInfoController implements Initializable {
         reservationController.setIntendedVehicleType(vehicleType);
         reservationController.setCustomer(customer);
         reservationController.setIntendedDateTime(startDay, endDay, startT, endT);
+        reservationController.setIntendedBranch(branch);
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);
+    }
+
+    void setIntendedBranch(Branch branch) {
+        this.branch = branch;
     }
 }

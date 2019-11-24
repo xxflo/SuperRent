@@ -40,9 +40,10 @@ public class VehicleListController implements Initializable {
     public Accordion resultAccordion;
     public Spinner startTime;
     public Spinner endTime;
+    public Label labelError;
     private DatabaseConnectionHandler dbHandler =  DatabaseConnectionHandler.getInstance();
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
-    private ObservableList<ObservableList> data;
+    private Branch location;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -55,32 +56,34 @@ public class VehicleListController implements Initializable {
         branchLocation.getSelectionModel().select(BranchUtil.VANCOUVER_A.toString());
     }
 
-    /**
-     * Trigger search based on options selected
-     * @param event
-     */
-    public void handleSelectVehicleOptions(MouseEvent event) {
+    public void handleSelectVehicleOptions() {
         String vType = vehicleType.getValue();
-        Branch location = BranchUtil.decodeBranchFromString(branchLocation.getValue());
+        location = BranchUtil.decodeBranchFromString(branchLocation.getValue());
         Timestamp startTimestamp = TimeUtil.getTimeStamp(startDate,startTime);
         Timestamp endTimestamp = TimeUtil.getTimeStamp(endDate, endTime);
 
-        ArrayList<Vehicle> vehicles = dbHandler.getVehiclesBasedOnOption(vType,location,startTimestamp,endTimestamp);
+        if ((startTimestamp != null && endTimestamp == null) ||
+                (startTimestamp == null && endTimestamp != null) ||
+                (startTimestamp != null && endTimestamp != null
+                        && (startTimestamp.after(endTimestamp)))){
+            labelError.setText("Please enter valid date range and (optionally) time.");
+        } else {
+            ArrayList<Vehicle> vehicles = dbHandler.getVehiclesBasedOnOption(vType,location,startTimestamp,endTimestamp);
 
-        HashMap<String,ArrayList<Vehicle>> vehicleMap = new HashMap<>();
+            HashMap<String,ArrayList<Vehicle>> vehicleMap = new HashMap<>();
 
-        for(Vehicle v:vehicles){
-            ArrayList<Vehicle> vehicleList = vehicleMap.get(v.getVtname());
-            if (vehicleList != null && vehicleList.size() > 0) {
-                vehicleList.add(v);
-            } else {
-                vehicleList = new ArrayList<>();
-                vehicleList.add(v);
-                vehicleMap.put(v.getVtname(),vehicleList);
+            for(Vehicle v:vehicles){
+                ArrayList<Vehicle> vehicleList = vehicleMap.get(v.getVtname());
+                if (vehicleList != null && vehicleList.size() > 0) {
+                    vehicleList.add(v);
+                } else {
+                    vehicleList = new ArrayList<>();
+                    vehicleList.add(v);
+                    vehicleMap.put(v.getVtname(),vehicleList);
+                }
             }
+            showVehicles(vehicleMap);
         }
-
-        showVehicles(vehicleMap);
     }
 
     /**
@@ -138,6 +141,7 @@ public class VehicleListController implements Initializable {
         CustomerInfoController customerInfoController = loader.getController();
         customerInfoController.setIntendedVehicleType(VehicleTypeName.getVehicleTypeName(vehicleType));
         customerInfoController.setIntendedDateTime(startDate.getValue(), endDate.getValue(), (LocalTime)startTime.getValue(), (LocalTime)endTime.getValue());
+        customerInfoController.setIntendedBranch(location);
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);
     }

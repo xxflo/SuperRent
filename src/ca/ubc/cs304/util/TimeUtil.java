@@ -12,12 +12,14 @@ import java.time.LocalTime;
 
 public class TimeUtil {
     public static Timestamp getTimeStamp(DatePicker date, Spinner time){
-        if (date.getValue() == null || time.getValue() == null) {
-            return null;
+        LocalDate dateVal;
+        LocalTime timeVal;
+        if (date.getValue() != null){
+            dateVal = date.getValue();
+            timeVal = time.getValue() == null ? LocalTime.of(0,0) : (LocalTime) time.getValue();
+            return Timestamp.valueOf(dateVal.atTime(timeVal));
         }
-        LocalDate dateVal = date.getValue();
-        LocalTime timeVal = (LocalTime) time.getValue();
-        return Timestamp.valueOf(dateVal.atTime(timeVal));
+        return null;
     }
 
     public static Date getTimeStampDate(DatePicker date) {
