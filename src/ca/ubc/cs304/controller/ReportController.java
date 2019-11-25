@@ -3,6 +3,7 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.util.BranchUtil;
+import ca.ubc.cs304.util.SceneSwitchUtil;
 import ca.ubc.cs304.util.TimeUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -10,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -35,6 +37,7 @@ public class ReportController implements Initializable {
 
     private DatabaseConnectionHandler handler;
     private BranchUtil branchUtil = BranchUtil.getInstance();
+    private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
     private static final String RENT_TOTAL_TEXT = "Total Rentals: %s";
     private static final String RENT_PER_VEHICLE_TEXT = "Rentals per Category";
     private static final String RENT_PER_BRANCH_TEXT = "Rentals per Branch";
@@ -177,5 +180,9 @@ public class ReportController implements Initializable {
 
         errorText.setVisible(true);
         errorText.setText(message);
+    }
+
+    public void handleGoBackMainPressed(ActionEvent actionEvent) throws IOException {
+        sceneSwitchUtil.switchSceneTo(actionEvent, SceneSwitchUtil.loginFxml);
     }
 }

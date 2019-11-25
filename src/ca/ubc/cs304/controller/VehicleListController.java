@@ -144,4 +144,8 @@ public class VehicleListController implements Initializable {
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);
     }
+
+    public void handleGoBackMainPressed(ActionEvent actionEvent) throws IOException {
+        sceneSwitchUtil.switchSceneTo(actionEvent, SceneSwitchUtil.loginFxml);
+    }
 }
