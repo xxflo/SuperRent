@@ -82,7 +82,7 @@ public class ReservationController implements Initializable {
                     (startTimestamp == null && endTimestamp != null) ||
                     (startTimestamp != null && endTimestamp != null
                             && (startTimestamp.after(endTimestamp)))){
-                labelError.setText("Please enter valid date range and (optionally) time.");
+                labelError.setText("Please enter valid date range.");
             }  else {
                 Reservation reservation = new Reservation(confNo,
                         selectedVehicleType,

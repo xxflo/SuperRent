@@ -7,7 +7,6 @@ import javafx.util.Pair;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 
@@ -334,10 +333,10 @@ public class DatabaseConnectionHandler {
 
             while(rs.next()){
                 customer = new Customer(
+                        rs.getString("dLicense"),
                         rs.getString("cellPhone"),
-                        rs.getString("name"),
                         rs.getString("address"),
-                        rs.getString("dLicense"));
+                        rs.getString("name"));
             }
             rs.close();
             ps.close();

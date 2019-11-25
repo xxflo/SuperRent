@@ -2,10 +2,7 @@ package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.*;
-import ca.ubc.cs304.util.BranchUtil;
-import ca.ubc.cs304.util.SceneSwitchUtil;
-import ca.ubc.cs304.util.TimeSpinnerUtil;
-import ca.ubc.cs304.util.TimeUtil;
+import ca.ubc.cs304.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -210,12 +207,13 @@ public class RentController implements Initializable {
                 return;
             }
             String creditCardNumber = reservationCreditCardNumber.getText();
-            if (creditCardNumber == null || creditCardNumber.isEmpty() || creditCardNumber.length() != 10) {
+            if (creditCardNumber == null || creditCardNumber.length() != LengthConstants.CREDIT_CARD_NUM_LENGTH) {
                 showRentError("You must enter a credit card number (10 digits long)");
                 return;
             }
             String expiryDate = reservationExpiryDate.getText();
-            if (expiryDate == null || expiryDate.isEmpty() || expiryDate.length() != 5) {
+            if (expiryDate == null || expiryDate.isEmpty()
+                    || expiryDate.length() != LengthConstants.EXPIRY_DATE_LENGTH) {
                 showRentError("You must select enter an expiry date in form MM/YY");
                 return;
             }
@@ -247,12 +245,12 @@ public class RentController implements Initializable {
                 return;
             }
             String creditCardNumber = noReservationCreditCardNumber.getText();
-            if (creditCardNumber == null || creditCardNumber.isEmpty() || creditCardNumber.length() != 10) {
+            if (creditCardNumber == null || creditCardNumber.length() != LengthConstants.CREDIT_CARD_NUM_LENGTH) {
                 showRentError("You must enter a credit card number (10 digits long)");
                 return;
             }
             String expiryDate = noReservationExpiryDate.getText();
-            if (expiryDate == null || expiryDate.isEmpty() || expiryDate.length() != 5) {
+            if (expiryDate == null || expiryDate.length() != LengthConstants.EXPIRY_DATE_LENGTH) {
                 showRentError("You must select enter an expiry date in form MM/YY");
                 return;
             }
