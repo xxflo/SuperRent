@@ -6,47 +6,52 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.ConfirmationController">
    <children>
-       <Pane fx:id="reservationPane" prefHeight="400.0" prefWidth="800.0" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+       <Pane fx:id="reservationPane" prefHeight="400.0" prefWidth="800.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
            <Label alignment="CENTER" layoutX="230.0" layoutY="80.0" prefHeight="23.0" text="Your Reservation is Confirmed!" textFill="#000">
                <font>
                    <Font name="American Typewriter" size="25.0" />
                </font>
            </Label>
-           <Label layoutX="123.0" layoutY="148.0" prefHeight="32.0" prefWidth="354.0" text="Confirmation Number: " textAlignment="RIGHT">
+           <Label layoutX="123.0" layoutY="148.0" prefHeight="32.0" prefWidth="192.0" text="Confirmation Number: " textAlignment="RIGHT">
                <font>
                    <Font name="American Typewriter" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="reservationConfNum" layoutX="310.0" layoutY="150.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="reservationConfNum" layoutX="315.0" layoutY="148.0" prefHeight="32.0" prefWidth="354.0" text=" ">
                <font>
                    <Font name="American Typewriter" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="reservationTypeName" layoutX="310.0" layoutY="200.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="reservationTypeName" layoutX="239.0" layoutY="195.0" prefHeight="32.0" prefWidth="354.0" text=" ">
                <font>
                    <Font name="ACaslonPro-Regular" size="18.0" />
                </font>
            </Label>
-           <Label layoutX="282.0" layoutY="262.0" prefHeight="32.0" prefWidth="354.0" text="To: " textAlignment="RIGHT">
+           <Label layoutX="123.0" layoutY="232.0" prefHeight="32.0" prefWidth="66.0" text="From:" textAlignment="RIGHT">
                <font>
                    <Font name="American Typewriter" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="reservationFromTime" layoutX="310.0" layoutY="250.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="reservationFromTime" layoutX="183.0" layoutY="232.0" prefHeight="32.0" prefWidth="354.0" text=" ">
                <font>
                    <Font name="ACaslonPro-Regular" size="18.0" />
                </font>
            </Label>
-           <Label layoutX="100.0" layoutY="300.0" prefHeight="32.0" prefWidth="354.0" text="To: ">
+           <Label layoutX="123.0" layoutY="273.0" prefHeight="32.0" prefWidth="41.0" text="To: ">
                <font>
                    <Font name="American Typewriter" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="reservationToTime" layoutX="310.0" layoutY="300.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="reservationToTime" layoutX="183.0" layoutY="273.0" prefHeight="32.0" prefWidth="354.0" text=" ">
                <font>
                    <Font name="ACaslonPro-Regular" size="18.0" />
                </font>
            </Label>
+         <Label layoutX="123.0" layoutY="197.0" text="Vehicle Type:">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
        </Pane>
         <Button fx:id="btnGoBackHome" layoutX="325.0" layoutY="416.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="50.0" prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
       <Pane fx:id="rentPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" visible="false">
@@ -76,7 +81,7 @@
             <Text fx:id="rentalCustomerPhoneNumber" layoutX="425.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="604-555-5555" />
          </children>
       </Pane>
-       <Pane fx:id="returnPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;">
+       <Pane fx:id="returnPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" visible="false">
            <children>
                <Label layoutX="80.0" layoutY="98.0" text="Confirmation Number:" />
                <Text layoutX="241.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Return is Complete">

@@ -326,7 +326,7 @@ public class DatabaseConnectionHandler {
     public Customer getCustomer(String driverLicense) {
         Customer customer = null;
         try {
-            String sql = "SELECT * FROM customer WHERE dLicense = " + driverLicense;
+            String sql = String.format("SELECT * FROM customer WHERE dLicense = '%1$s'", driverLicense);
             PreparedStatement ps = connection.prepareStatement(sql);
 
             System.out.println("SQL for getting customer with license: " + sql);
