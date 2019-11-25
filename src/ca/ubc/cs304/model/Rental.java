@@ -30,6 +30,14 @@ public class Rental implements DateTimeModel {
         this.toDateTime = toDateTime;
     }
 
+    public Timestamp getFromDateTime() {
+        return fromDateTime;
+    }
+
+    public Timestamp getToDateTime() {
+        return toDateTime;
+    }
+
     public String getRid() {
         return rid;
     }
