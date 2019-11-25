@@ -9,7 +9,7 @@ public class Customer {
     private final String address;
     private final String name;
 
-    public Customer(String phoneNum, String name, String address, String license) {
+    public Customer(String license, String phoneNum, String address, String name) {
         this.license = license;
         this.phoneNum = phoneNum;
         this.address = address;

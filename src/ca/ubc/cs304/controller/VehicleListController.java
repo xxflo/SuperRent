@@ -64,8 +64,9 @@ public class VehicleListController implements Initializable {
                 (startTimestamp == null && endTimestamp != null) ||
                 (startTimestamp != null && endTimestamp != null
                         && (startTimestamp.after(endTimestamp)))){
-            labelError.setText("Please enter valid date range and (optionally) time.");
+            labelError.setText("Please select valid date range and (optionally) time.");
         } else {
+            labelError.setText("");
             ArrayList<Vehicle> vehicles = dbHandler.getVehiclesBasedOnOption(vType,location,startTimestamp,endTimestamp);
 
             HashMap<String,ArrayList<Vehicle>> vehicleMap = new HashMap<>();
