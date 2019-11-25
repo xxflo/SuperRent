@@ -14,7 +14,6 @@ public class Reservation implements DateTimeModel {
     private final Timestamp toTime;
     private final Branch branch;
 
-
     public Reservation(String confNo, String vtname, String driverLicense, Timestamp fromTime, Timestamp toTime, Branch branch) {
         this.confNo = confNo;
         this.vtname = vtname;
@@ -22,6 +21,14 @@ public class Reservation implements DateTimeModel {
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.branch = branch;
+    }
+
+    public Timestamp getFromTime() {
+        return fromTime;
+    }
+
+    public Timestamp getToTime() {
+        return toTime;
     }
 
     public String getConfNo() {

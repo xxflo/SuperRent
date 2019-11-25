@@ -222,11 +222,11 @@ public class DatabaseConnectionHandler {
         String and = " AND ";
         try {
             Statement stmt = connection.createStatement();
-            String mainQuery = "SELECT * FROM VEHICLE V WHERE";
-            String subQuery = "NOT EXISTS (SELECT * FROM RENT R WHERE R.vlicense = V.vlicense";
-            vTypeCrit = carType.isEmpty()? " " : " vtname = '" + carType + "'" + and;
-            cityCrit = "city = '" + branch.getCity() + "'";
-            locationCrit = "location = '" + branch.getLocation() + "'";
+            String mainQuery = "SELECT * FROM VEHICLE V WHERE \n";
+            String subQuery = "NOT EXISTS (SELECT * FROM RENT R WHERE R.vlicense = V.vlicense \n";
+            vTypeCrit = carType.isEmpty()? " " : " vtname = '" + carType + "'" + and + "\n";
+            cityCrit = "city = '" + branch.getCity() + "'" + "\n";
+            locationCrit = "location = '" + branch.getLocation() + "'" + "\n";
             if (startDateTime!=null && endDateTime!=null){
                 String endTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", endDateTime);
                 String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", startDateTime);
@@ -273,7 +273,7 @@ public class DatabaseConnectionHandler {
             ps.setTimestamp(1, startTime);
             ps.setTimestamp(2, endTime);
 
-            System.out.println("SQL for selecting TimePeriod with entry: " + sql_select);
+            System.out.println("\nSQL for selecting TimePeriod with entry: \n" + sql_select);
             System.out.println("With parameters: " + startTime.toString() + ", " + endTime.toString());
 
             ResultSet rs = ps.executeQuery();
@@ -309,7 +309,7 @@ public class DatabaseConnectionHandler {
             ps.setString(6, reservation.getBranch().getLocation());
             ps.setString(7, reservation.getBranch().getCity());
 
-            System.out.println("SQL for inserting new reservation into table: " + sql);
+            System.out.println("\nSQL for inserting new reservation into table: \n" + sql);
             System.out.println("With parameters: " + reservation.toString());
 
             ps.executeUpdate();
@@ -330,7 +330,7 @@ public class DatabaseConnectionHandler {
             String sql = String.format("SELECT * FROM customer WHERE dLicense = '%1$s'", driverLicense);
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for getting customer with license: " + sql);
+            System.out.println("\nSQL for getting customer with license: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
@@ -358,7 +358,7 @@ public class DatabaseConnectionHandler {
             ps.setString(3, customer.getAddress());
             ps.setString(4, customer.getLicense());
 
-            System.out.println("SQL for inserting new customer into table: " + sql);
+            System.out.println("\nSQL for inserting new customer into table: \n" + sql);
             System.out.println("With Parameters: " + customer.toString());
 
             ps.executeUpdate();
@@ -376,19 +376,19 @@ public class DatabaseConnectionHandler {
         try {
             String filterBranchClause = "";
             if (branch != null) {
-                filterBranchClause = String.format("and v.location = '%1$s' and v.city = '%2$s' ", branch.getLocation(), branch.getCity());
+                filterBranchClause = String.format("and v.location = '%1$s' and v.city = '%2$s' \n", branch.getLocation(), branch.getCity());
             }
             String sql =
-                    "SELECT v.location, v.city, v.vtname, v.vlicense, v.make, v.model, v.year, v.color " +
-                            "FROM RENT r, VEHICLE v " +
-                            "WHERE r.vlicense = v.vlicense " +
+                    "SELECT v.location, v.city, v.vtname, v.vlicense, v.make, v.model, v.year, v.color \n" +
+                            "FROM RENT r, VEHICLE v \n" +
+                            "WHERE r.vlicense = v.vlicense \n" +
                             filterBranchClause +
-                            String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                            String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') \n", date) +
                             "ORDER BY v.city, v.location, v.vtname";
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for daily rental aggregate: " + sql);
+            System.out.println("\nSQL for daily rental aggregate: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             List<RentalDetailAggregate> aggregates = new ArrayList<>();
@@ -415,20 +415,20 @@ public class DatabaseConnectionHandler {
     public List<RentalAggregate> getDailyRentalAggregateByVehicleType(Date date, Branch branch) {
         try {
             String sql =
-                    "SELECT v.vtname, COUNT(r.rid) as rentCount " +
-                            "FROM RENT r, VEHICLE v " +
-                            "WHERE r.vlicense = v.vlicense " +
+                    "SELECT v.vtname, COUNT(r.rid) as rentCount \n" +
+                            "FROM RENT r, VEHICLE v \n" +
+                            "WHERE r.vlicense = v.vlicense \n" +
                             String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD')", date);
 
             if (branch != null) {
                 String branchClause = String.format("and v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
-                sql = sql + " " + branchClause;
+                sql = sql + " \n" + branchClause;
             }
 
-            sql = sql + " " + "GROUP BY v.vtname";
+            sql = sql + " \n" + "GROUP BY v.vtname";
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for daily rental aggregate by vehicle category: " + sql);
+            System.out.println("\nSQL for daily rental aggregate by vehicle category: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             List<RentalAggregate> aggregates = new ArrayList<>();
@@ -449,19 +449,19 @@ public class DatabaseConnectionHandler {
     public List<RentalAggregate> getDailyRentalAggregateByBranch(Date date, Branch branch) {
         try {
             String sql =
-                    "SELECT v.location, v.city, COUNT(r.rid) as rentCount " +
-                            "FROM RENT r, VEHICLE v " +
-                            "WHERE r.vlicense = v.vlicense " +
-                            String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                    "SELECT v.location, v.city, COUNT(r.rid) as rentCount \n" +
+                            "FROM RENT r, VEHICLE v \n" +
+                            "WHERE r.vlicense = v.vlicense \n" +
+                            String.format("and trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') \n", date) +
                             "GROUP BY (v.location, v.city)";
             if (branch != null) {
                 String havingClause = String.format("HAVING v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
-                sql = sql + " " + havingClause;
+                sql = sql + " \n" + havingClause;
             }
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for daily rental aggregate by branch: " + sql);
+            System.out.println("\nSQL for daily rental aggregate by branch: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             List<RentalAggregate> aggregates = new ArrayList<>();
@@ -482,18 +482,18 @@ public class DatabaseConnectionHandler {
     public int getDailyRentalCount(Date date, Branch branch) {
         try {
             String sql =
-                    "SELECT COUNT(r.rid) as rentCount " +
-                            "FROM RENT r, Vehicle v " +
-                            String.format("WHERE trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                    "SELECT COUNT(r.rid) as rentCount \n" +
+                            "FROM RENT r, Vehicle v \n" +
+                            String.format("WHERE trunc(r.fromDateTime) = to_date('%s', 'YYYY-MM-DD') \n", date) +
                             String.format("and r.vlicense = v.vlicense");
 
             if (branch != null) {
                 String branchClause = String.format("and v.city = '%1$s' and v.location = '%2$s'", branch.getCity(), branch.getLocation());
-                sql = sql + " " + branchClause;
+                sql = sql + " \n" + branchClause;
             }
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for daily rental aggregate by branch: " + sql);
+            System.out.println("\nSQL for daily rental aggregate by branch: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -512,20 +512,20 @@ public class DatabaseConnectionHandler {
         try {
             String filterBranchClause = "";
             if (branch != null) {
-                filterBranchClause = String.format("and v.location = '%1$s' and v.city = '%2$s' ", branch.getLocation(), branch.getCity());
+                filterBranchClause = String.format("and v.location = '%1$s' and v.city = '%2$s' \n", branch.getLocation(), branch.getCity());
             }
 
             String sql =
-                    "SELECT v.location, v.city, v.vtname, v.vlicense, v.make, v.model, v.year, v.color, ret.value " +
-                            "FROM RENT rent, RETURN ret, VEHICLE v " +
-                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid " +
+                    "SELECT v.location, v.city, v.vtname, v.vlicense, v.make, v.model, v.year, v.color, ret.value \n" +
+                            "FROM RENT rent, RETURN ret, VEHICLE v \n" +
+                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid \n" +
                             filterBranchClause +
-                            String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                            String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD') \n", date) +
                             "ORDER BY v.city, v.location, v.vtname";
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for daily return aggregate: " + sql);
+            System.out.println("\nSQL for daily return aggregate: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             List<ReturnDetailAggregate> aggregates = new ArrayList<>();
@@ -553,20 +553,20 @@ public class DatabaseConnectionHandler {
     public List<ReturnAggregate> getDailyReturnAggregateByCategory(Date date, Branch branch) {
         try {
             String sql =
-                    "SELECT v.vtname, COUNT(ret.rid) as returnCount, SUM(ret.value) as totalValue " +
-                            "FROM RENT rent, RETURN ret, VEHICLE v " +
-                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid " +
+                    "SELECT v.vtname, COUNT(ret.rid) as returnCount, SUM(ret.value) as totalValue \n" +
+                            "FROM RENT rent, RETURN ret, VEHICLE v \n" +
+                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid \n" +
                             String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD')", date);
 
             if (branch != null) {
                 String branchClause = String.format("and v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
-                sql = sql + " " + branchClause;
+                sql = sql + " \n" + branchClause;
             }
 
-            sql = sql + " " + "GROUP BY (v.vtname)";
+            sql = sql + " \n" + "GROUP BY (v.vtname)";
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for daily return aggregate by vehicle category: " + sql);
+            System.out.println("\nSQL for daily return aggregate by vehicle category: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             List<ReturnAggregate> aggregates = new ArrayList<>();
@@ -588,19 +588,19 @@ public class DatabaseConnectionHandler {
     public List<ReturnAggregate> getDailyReturnAggregateByBranch(Date date, Branch branch) {
         try {
             String sql =
-                    "SELECT v.location, v.city, COUNT(ret.rid) as returnCount, SUM(ret.value) as totalValue " +
-                            "FROM RENT rent, RETURN ret, VEHICLE v " +
-                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid " +
-                            String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD') ", date) +
+                    "SELECT v.location, v.city, COUNT(ret.rid) as returnCount, SUM(ret.value) as totalValue \n" +
+                            "FROM RENT rent, RETURN ret, VEHICLE v \n" +
+                            "WHERE rent.vlicense = v.vlicense and rent.rid = ret.rid \n" +
+                            String.format("and trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD') \n", date) +
                             "GROUP BY (v.location, v.city)";
 
             if (branch != null) {
                 String havingClause = String.format("HAVING v.location = '%1$s' and v.city = '%2$s'", branch.getLocation(), branch.getCity());
-                sql = sql + havingClause;
+                sql = sql + " \n" + havingClause;
             }
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for daily return aggregate by branch: " + sql);
+            System.out.println("\nSQL for daily return aggregate by branch: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             List<ReturnAggregate> aggregates = new ArrayList<>();
@@ -623,18 +623,18 @@ public class DatabaseConnectionHandler {
     public double getDailyReturnValue(Date date, Branch branch) {
         try {
             String sql =
-                    "SELECT SUM(ret.value) as returnValue " +
-                            "FROM RETURN ret, RENT rent, Vehicle v " +
+                    "SELECT SUM(ret.value) as returnValue \n" +
+                            "FROM RETURN ret, RENT rent, Vehicle v \n" +
                             String.format("WHERE trunc(ret.return_dateTime) = to_date('%s', 'YYYY-MM-DD')", date) +
                             " and ret.rid = rent.rid";
 
             if (branch != null) {
                 String branchClause = String.format("and v.city = '%1$s' and v.location = '%2$s'", branch.getCity(), branch.getLocation());
-                sql = sql + " " + branchClause;
+                sql = sql + " \n" + branchClause;
             }
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            System.out.println("SQL for daily rental aggregate by branch: " + sql);
+            System.out.println("\nSQL for daily rental aggregate by branch: \n" + sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -654,7 +654,7 @@ public class DatabaseConnectionHandler {
             Customer customer
     ) {
         try {
-            String sql = "SELECT * FROM RESERVATION r ";
+            String sql = "SELECT * FROM RESERVATION r \n";
             if (confNo != null && !confNo.isEmpty()) {
                 sql += String.format("WHERE r.confNo = '%1$s'", confNo);
             } else {
@@ -662,7 +662,7 @@ public class DatabaseConnectionHandler {
             }
 
             PreparedStatement ps = connection.prepareStatement(sql);
-            System.out.println("SQL for fetching reservation: " + sql);
+            System.out.println("\nSQL for fetching reservation: \n" + sql);
 
             ps.executeQuery();
             ResultSet rs = ps.getResultSet();
@@ -699,11 +699,11 @@ public class DatabaseConnectionHandler {
             String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", reservation.getStartTime());
 
             String sql = String.format(
-                    "INSERT INTO RENT (rid, vlicense, dlicense, fromDateTime, toDateTime, odometer, cardName, cardNo, ExpDate, confNo) " +
-                            "SELECT '%1$s', v.vlicense, '%2$s', %3$s, %4$s, v.odometer, '%5$s', '%6$s', '%7$s', '%8$s' " +
-                            "FROM Vehicle v " +
-                            "WHERE v.status = 'available' " +
-                            "and v.vtname = '%9$s' and v.location = '%10$s' and v.city = '%11$s' " +
+                    "INSERT INTO RENT (rid, vlicense, dlicense, fromDateTime, toDateTime, odometer, cardName, cardNo, ExpDate, confNo) \n" +
+                            "SELECT '%1$s', v.vlicense, '%2$s', %3$s, %4$s, v.odometer, '%5$s', '%6$s', '%7$s', '%8$s' \n" +
+                            "FROM Vehicle v \n" +
+                            "WHERE v.status = 'available' \n" +
+                            "and v.vtname = '%9$s' and v.location = '%10$s' and v.city = '%11$s' \n" +
                             "and rownum = 1",
                     rid,
                     customer.getLicense(),
@@ -717,12 +717,12 @@ public class DatabaseConnectionHandler {
                     reservation.getBranch().getLocation(),
                     reservation.getBranch().getCity());
 
-            System.out.println("SQL for inserting new rental into table: " + sql);
+            System.out.println("\nSQL for inserting new rental into table: \n" + sql);
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeUpdate();
 
             String fetchSql = String.format("SELECT * FROM RENT r WHERE r.rid = '%1$s'", rid);
-            System.out.println("SQL for fetch return: " + fetchSql);
+            System.out.println("\nSQL for fetch return: \n" + fetchSql);
             ps = connection.prepareStatement(fetchSql);
             ps.executeQuery(fetchSql);
             ResultSet rs = ps.getResultSet();
@@ -747,7 +747,7 @@ public class DatabaseConnectionHandler {
                                 "WHERE vlicense = '%1$s'",
                         r.getVlicense());
 
-                System.out.println(String.format("Query to update vehicle: %s", updateVehicleSql));
+                System.out.println(String.format("\nQuery to update vehicle: \n%s", updateVehicleSql));
                 ps = connection.prepareStatement(updateVehicleSql);
                 ps.executeUpdate();
                 connection.commit();
@@ -787,11 +787,11 @@ public class DatabaseConnectionHandler {
             String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", startTime);
 
             String sql = String.format(
-                    "INSERT INTO RENT (rid, vlicense, dlicense, fromDateTime, toDateTime, odometer, cardName, cardNo, ExpDate) " +
-                    "SELECT '%1$s', v.vlicense, '%2$s', %3$s, %4$s, v.odometer, '%5$s', '%6$s', '%7$s' " +
-                    "FROM Vehicle v " +
-                    "WHERE v.status = 'available' " +
-                    "and v.vtname = '%8$s' and v.location = '%9$s' and v.city = '%10$s' " +
+                    "INSERT INTO RENT (rid, vlicense, dlicense, fromDateTime, toDateTime, odometer, cardName, cardNo, ExpDate) \n" +
+                    "SELECT '%1$s', v.vlicense, '%2$s', %3$s, %4$s, v.odometer, '%5$s', '%6$s', '%7$s' \n" +
+                    "FROM Vehicle v \n" +
+                    "WHERE v.status = 'available' \n" +
+                    "and v.vtname = '%8$s' and v.location = '%9$s' and v.city = '%10$s' \n" +
                     "and rownum = 1",
                     rid,
                     customer.getLicense(),
@@ -804,13 +804,13 @@ public class DatabaseConnectionHandler {
                     location.getLocation(),
                     location.getCity());
 
-            System.out.println("SQL for inserting new rental into table: " + sql);
+            System.out.println("\nSQL for inserting new rental into table: \n" + sql);
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeUpdate();
 
 
             String fetchSql = String.format("SELECT * FROM RENT r WHERE r.rid = '%1$s'", rid);
-            System.out.println("SQL for fetch return: " + fetchSql);
+            System.out.println("\nSQL for fetch return: \n" + fetchSql);
             ps = connection.prepareStatement(fetchSql);
             ps.executeQuery(fetchSql);
             ResultSet rs = ps.getResultSet();
@@ -835,7 +835,7 @@ public class DatabaseConnectionHandler {
                                 "WHERE vlicense = '%1$s'",
                         r.getVlicense());
 
-                System.out.println(String.format("Query to update vehicle: %s", updateVehicleSql));
+                System.out.println(String.format("\nQuery to update vehicle: \n%s", updateVehicleSql));
                 ps = connection.prepareStatement(updateVehicleSql);
                 ps.executeUpdate();
                 connection.commit();
@@ -862,7 +862,7 @@ public class DatabaseConnectionHandler {
     ) {
         try {
             String sql = String.format("SELECT * FROM Rent r WHERE r.vlicense = %1$s and r.dlicense = %2$s ORDER BY r.fromDateTime DESC", vlicense, dlicense);
-            System.out.println(String.format("SQL for fetching rental: %1$s", sql));
+            System.out.println(String.format("\nSQL for fetching rental: \n%1$s", sql));
 
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeQuery();
@@ -899,22 +899,22 @@ public class DatabaseConnectionHandler {
         try {
             String returnTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", returnTime);
             String sql = String.format(
-                    "WITH returnSummary as (SELECT v.vtname as vtname, " +
-                            "EXTRACT(hour from %1$s - r.fromDateTime) as hoursBetween, " +
-                            "FLOOR(EXTRACT(day from %1$s - r.fromDateTime) / 7) as weeksBetween, " +
-                            "EXTRACT(day from %1$s - r.fromDateTime) - " +
-                            "FLOOR(EXTRACT(day from %1$s - r.fromDateTime) / 7) * 7 as daysBetween, " +
-                            "(%2$s - r.odometer) as odometerDifference " +
-                            "FROM Rent r, Vehicle v " +
-                            "WHERE r.rid = '%3$s' and r.vlicense = v.vlicense) " +
-                            "SELECT hoursBetween, weeksBetween, daysBetween, odometerDifference, " +
-                            "krate, hrate, drate, wrate, hirate, dirate, wirate, vt.vtname, vt.features, " +
-                            "(CASE WHEN odometerDifference > 2000 then (odometerDifference - 2000) * vt.krate ELSE 0 END) as kmPrice, " +
-                            "(CASE WHEN odometerDifference > 2000 then (odometerDifference - 2000) * vt.krate ELSE 0 END) + hoursBetween * hrate + hoursBetween * hirate + daysBetween * drate + daysBetween * dirate + weeksBetween * wrate + weeksBetween * wirate as returnValue " +
-                            "FROM VehicleType vt, returnSummary rs " +
+                    "WITH returnSummary as (SELECT v.vtname as vtname, \n" +
+                            "EXTRACT(hour from %1$s - r.fromDateTime) as hoursBetween, \n" +
+                            "FLOOR(EXTRACT(day from %1$s - r.fromDateTime) / 7) as weeksBetween, \n" +
+                            "EXTRACT(day from %1$s - r.fromDateTime) - \n" +
+                            "FLOOR(EXTRACT(day from %1$s - r.fromDateTime) / 7) * 7 as daysBetween, \n" +
+                            "(%2$s - r.odometer) as odometerDifference \n" +
+                            "FROM Rent r, Vehicle v \n" +
+                            "WHERE r.rid = '%3$s' and r.vlicense = v.vlicense) \n" +
+                            "SELECT hoursBetween, weeksBetween, daysBetween, odometerDifference, \n" +
+                            "krate, hrate, drate, wrate, hirate, dirate, wirate, vt.vtname, vt.features, \n" +
+                            "(CASE WHEN odometerDifference > 2000 then (odometerDifference - 2000) * vt.krate ELSE 0 END) as kmPrice, \n" +
+                            "(CASE WHEN odometerDifference > 2000 then (odometerDifference - 2000) * vt.krate ELSE 0 END) + hoursBetween * hrate + hoursBetween * hirate + daysBetween * drate + daysBetween * dirate + weeksBetween * wrate + weeksBetween * wirate as returnValue \n" +
+                            "FROM VehicleType vt, returnSummary rs \n" +
                             "WHERE vt.vtname = rs.vtname",
                     returnTimeQuery, returnOdometer, rid);
-            System.out.println(String.format("SQL for generating cost for return: %s", sql));
+            System.out.println(String.format("\nSQL for generating cost for return: \n%s", sql));
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeQuery();
 
@@ -965,7 +965,7 @@ public class DatabaseConnectionHandler {
             String insertReturnSql = String.format("INSERT INTO RETURN VALUES('%1$s', %2$s, %3$s, '%4$s', %5$s)",
             rental.getRid(), returnTimeQuery, odometer, gasFullSql, value);
             PreparedStatement ps = connection.prepareStatement(insertReturnSql);
-            System.out.println(String.format("Query to insert rental: %s", insertReturnSql));
+            System.out.println(String.format("\nQuery to insert rental: \n%s", insertReturnSql));
             ps.executeUpdate();
             String updateVehicleSql = String.format(
                     "UPDATE VEHICLE " +
@@ -974,12 +974,12 @@ public class DatabaseConnectionHandler {
                             "WHERE vlicense = '%2$s'",
                     odometer, rental.getVlicense());
 
-            System.out.println(String.format("Query to update vehicle: %s", updateVehicleSql));
+            System.out.println(String.format("\nQuery to update vehicle: \n%s", updateVehicleSql));
             ps = connection.prepareStatement(updateVehicleSql);
             ps.executeUpdate();
             connection.commit();
 
-            System.out.println(String.format("Query to fetch return: %s", updateVehicleSql));
+            System.out.println(String.format("\nQuery to fetch return: \n%s", updateVehicleSql));
             String fetchReturnSql = String.format("SELECT * FROM RETURN WHERE rid = '%1$s'", rental.getRid());
             ps = connection.prepareStatement(fetchReturnSql);
             ps.executeQuery();
