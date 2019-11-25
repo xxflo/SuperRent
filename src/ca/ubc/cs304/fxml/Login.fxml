@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.HomeController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.HomeController">
    <children>
-      <Label alignment="CENTER" layoutX="260.0" layoutY="120.0" text="SuperRent" textFill="#140086">
+      <Label alignment="CENTER" layoutX="236.0" layoutY="131.0" prefHeight="121.0" prefWidth="319.0" text="SuperRent" textFill="#140086">
          <font>
-            <Font name="American Typewriter" size="50.0" />
+            <Font name="American Typewriter" size="56.0" />
          </font>
       </Label>
-       <Button fx:id="btnClerk" layoutX="250.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="50.0" prefWidth="108.0" style="-fx-background-color: #6cb881;" text="Clerk Mode" textFill="WHITE" />
-       <Button fx:id="btnCustomer" layoutX="430.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="50.0" prefWidth="108.0" style="-fx-background-color: #FCBB31;" text="Customer Mode" textFill="WHITE" />
-      <Button fx:id="btnAdmin" layoutX="250.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleClicks" style="-fx-background-color: blue;" text="Admin Mode" textFill="WHITE" />
+       <Button fx:id="btnClerk" layoutX="250.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="59.0" prefWidth="109.0" style="-fx-background-color: #6cb881;" text="Clerk Mode" textFill="WHITE" />
+       <Button fx:id="btnCustomer" layoutX="430.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="59.0" prefWidth="110.0" style="-fx-background-color: #FCBB31;" text="Customer Mode" textFill="WHITE" />
+       <Button fx:id="btnAdmin" layoutX="250.0" layoutY="370.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="59.0" prefWidth="110.0" style="-fx-background-color: #37b8cc;" text="Admin Mode" textFill="WHITE" />
    </children>
 </AnchorPane>

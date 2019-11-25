@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.RentController">
+   <children>
+      <Pane layoutX="6.0" layoutY="7.0" opacity="0.85" prefHeight="492.0" prefWidth="376.0" style="-fx-background-color: white;">
+         <children>
+            <Text layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Rental" wrappingWidth="134.93359375">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <CheckBox fx:id="reservationCheckbox" layoutX="14.0" layoutY="46.0" mnemonicParsing="false" onAction="#onCheck" text="Has Reservation" />
+            <Pane fx:id="withReservationInputPane" layoutX="14.0" layoutY="76.0" prefHeight="200.0" prefWidth="320.0">
+               <children>
+                  <TextField fx:id="confirmationNumber" layoutX="14.0" layoutY="14.0" promptText="Confirmation Number" />
+                  <TextField fx:id="reservationDriverLicense" editable="false" layoutX="14.0" layoutY="64.0" promptText="Driver License Number" />
+                  <TextField fx:id="reservationCreditCardNumber" layoutX="14.0" layoutY="124.0" promptText="Card Number" />
+                  <TextField fx:id="reservationExpiryDate" layoutX="14.0" layoutY="161.0" promptText="Expiry Date (mm/yy)" />
+                  <Text layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" />
+                  <TextField fx:id="reservationCreditCardName" layoutX="171.0" layoutY="124.0" promptText="Credit Card Name" />
+               </children>
+            </Pane>
+            <Pane fx:id="withoutReservationInputPane" layoutX="14.0" layoutY="76.0" prefHeight="282.0" prefWidth="320.0" visible="false">
+               <children>
+                  <ComboBox fx:id="locationPicker" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Location" />
+                  <ComboBox fx:id="vehicleTypePicker" layoutX="14.0" layoutY="49.0" prefWidth="150.0" promptText="Vehicle Type" />
+                  <Spinner fx:id="startTime" layoutX="15.0" layoutY="127.0" prefHeight="25.0" prefWidth="86.0" />
+                  <DatePicker fx:id="startDate" layoutX="14.0" layoutY="100.0" prefHeight="25.0" prefWidth="135.0" promptText="Start Date" />
+                  <DatePicker fx:id="endDate" layoutX="157.0" layoutY="100.0" prefHeight="25.0" prefWidth="135.0" promptText="End Date" />
+                  <Spinner fx:id="endTime" layoutX="157.0" layoutY="127.0" prefHeight="25.0" prefWidth="86.0" />
+                  <TextField fx:id="noReservationDriverLicense" editable="false" layoutX="15.0" layoutY="170.0" promptText="Driver License Number" />
+                  <TextField fx:id="noReservationCreditCardNumber" layoutX="15.0" layoutY="203.0" promptText="Credit Card Number" />
+                  <TextField fx:id="noReservationExpiryDate" layoutX="15.0" layoutY="237.0" promptText="Expiry Date (mm/yy)" />
+                  <TextField fx:id="noReservationCreditCardName" layoutX="169.0" layoutY="203.0" promptText="Credit Card Name" />
+               </children>
+            </Pane>
+            <Button layoutX="30.0" layoutY="372.0" mnemonicParsing="false" onAction="#onSubmitRental" prefHeight="50.0" prefWidth="99.0" text="Submit" />
+            <Text fx:id="rentError" fill="#ff3d3d" layoutX="30.0" layoutY="447.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error Text" visible="false" wrappingWidth="105.64453601837158" />
+         </children>
+      </Pane>
+      <Pane layoutX="382.0" layoutY="14.0" opacity="0.8" prefHeight="478.0" prefWidth="411.0" style="-fx-background-color: white;">
+         <children>
+            <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Return">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <TextField fx:id="returnVehicleLicense" layoutX="14.0" layoutY="51.0" promptText="Vehicle License" />
+            <TextField fx:id="returnOdometer" layoutX="14.0" layoutY="86.0" promptText="Odometer" />
+            <DatePicker fx:id="returnDate" layoutX="14.0" layoutY="129.0" promptText="Return Day/Time" />
+            <Spinner fx:id="returnTime" layoutX="14.0" layoutY="161.0" prefHeight="25.0" prefWidth="106.0" />
+            <Button fx:id="returnSubmit" layoutX="14.0" layoutY="214.0" mnemonicParsing="false" onAction="#onSubmitReturn" prefHeight="50.0" prefWidth="106.0" text="Submit" />
+            <Text fx:id="returnError" layoutX="14.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error Text" />
+            <CheckBox fx:id="gasFull" layoutX="188.0" layoutY="55.0" mnemonicParsing="false" text="Gas Full" />
+         </children></Pane>
+   </children>
+</AnchorPane>

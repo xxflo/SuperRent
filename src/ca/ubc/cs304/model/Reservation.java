@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 /**
  * Store information about a single reservation
  */
-public class Reservation {
+public class Reservation implements DateTimeModel {
     private final String confNo;
     private final String vtname;
     private final String driverLicense;
@@ -36,9 +36,15 @@ public class Reservation {
         return driverLicense;
     }
 
-    public Timestamp getFromTime() { return fromTime; }
+    @Override
+    public Timestamp getStartTime() {
+        return fromTime;
+    }
 
-    public Timestamp getToTime() { return toTime; }
+    @Override
+    public Timestamp getEndTime() {
+        return toTime;
+    }
 
     public Branch getBranch() {return branch;}
 

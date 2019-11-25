@@ -3,12 +3,14 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.Branch;
 import ca.ubc.cs304.model.Customer;
+import ca.ubc.cs304.model.VehicleType;
 import ca.ubc.cs304.model.VehicleTypeName;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.io.IOException;
@@ -16,10 +18,10 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class CustomerInfoController implements Initializable {
-
-
     public TextField driverLicense;
     public TextField newDriverLicense;
     public TextField newCellNumber;
@@ -38,6 +40,9 @@ public class CustomerInfoController implements Initializable {
     private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
     private Customer customer;
     private VehicleTypeName intendedVehicleType;
+    private String nextView;
+
+//    public Branch intendedBranch;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,7 +54,7 @@ public class CustomerInfoController implements Initializable {
             if (customer == null) {
                 labelError.setText("Customer does not exist. Try again or sign up instead.");
             } else {
-                switchToReservation(actionEvent,intendedVehicleType,customer);
+                switchToNextView(actionEvent,intendedVehicleType,customer);
             }
         } else {
             labelError.setText("Field cannot be empty");
@@ -68,7 +73,7 @@ public class CustomerInfoController implements Initializable {
             if (!success) {
                 newLabelError.setText("Database error. Try again.");
             } else {
-                switchToReservation(actionEvent,intendedVehicleType,customer);
+                switchToNextView(actionEvent,intendedVehicleType,customer);
             }
         } else {
             newDriverLicense.setStyle("-fx-border-color: red");
@@ -95,15 +100,24 @@ public class CustomerInfoController implements Initializable {
         this.endT = endTime;
     }
 
-    private void switchToReservation(ActionEvent actionEvent, VehicleTypeName vehicleType, Customer customer) throws IOException {
-        FXMLLoader loader = sceneSwitchUtil.getLoaderForScene(SceneSwitchUtil.reservationFxml);
+    public void setNextView(String fxml) {
+        this.nextView = fxml;
+    }
+
+    private void switchToNextView(ActionEvent actionEvent, VehicleTypeName vehicleType, Customer customer) throws IOException {
+        FXMLLoader loader = sceneSwitchUtil.getLoaderForScene(nextView);
         Parent root = loader.load();
 
-        ReservationController reservationController = loader.getController();
-        reservationController.setIntendedVehicleType(vehicleType);
-        reservationController.setCustomer(customer);
-        reservationController.setIntendedDateTime(startDay, endDay, startT, endT);
-        reservationController.setIntendedBranch(branch);
+        if (nextView == SceneSwitchUtil.reservationFxml) {
+            ReservationController reservationController = loader.getController();
+            reservationController.setIntendedVehicleType(vehicleType);
+            reservationController.setCustomer(customer);
+            reservationController.setIntendedDateTime(startDay, endDay, startT, endT);
+            reservationController.setIntendedBranch(branch);
+         } else if (nextView == SceneSwitchUtil.rentFxml) {
+            RentController rentController = loader.getController();
+            rentController.setCustomer(customer);
+        }
 
         sceneSwitchUtil.switchSceneTo(actionEvent,root);
     }

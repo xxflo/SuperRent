@@ -1,6 +1,7 @@
 package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
+import ca.ubc.cs304.util.SceneSwitchUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -9,6 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -18,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class AdminController implements Initializable {
     private DatabaseConnectionHandler handler = DatabaseConnectionHandler.getInstance();
+    private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
 
     public ComboBox<String> tableViewBox;
 
@@ -91,5 +94,9 @@ public class AdminController implements Initializable {
 
         tableView.getItems().addAll(items);
         tableView.getColumns().addAll(columns);
+    }
+
+    public void handleGoBackMainPressed(ActionEvent actionEvent) throws IOException {
+        sceneSwitchUtil.switchSceneTo(actionEvent, SceneSwitchUtil.loginFxml);
     }
 }
