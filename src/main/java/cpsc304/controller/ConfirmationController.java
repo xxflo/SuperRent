@@ -39,7 +39,6 @@ public class ConfirmationController implements Initializable {
     public Text returnVtName;
     public Text returnReturnTime;
     public Text returnStartDate;
-    public Text returnLocation;
     public Text returnDuration;
     public Text returnCustomerName;
     public Text returnCustomerDriverLicense;
