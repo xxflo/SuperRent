@@ -18,6 +18,8 @@ import javafx.util.Pair;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
@@ -107,7 +109,7 @@ public class RentController implements Initializable {
         } else if (odometer < existingRental.getOdometer()) {
             showReturnError(String.format("The end odometer value must be greater than the starting: %s", existingRental.getOdometer()));
             return;
-        } else if (returnTimestamp.getTime() < existingRental.getStartTime().getTime()) {
+        } else if (returnTimestamp.getTime() <= existingRental.getStartTime().getTime()) {
             showReturnError(String.format("The return time must be greater than the rental start time: %s", existingRental.getStartTime().toString()));
             return;
         }
@@ -219,11 +221,48 @@ public class RentController implements Initializable {
                 showRentError("You must select enter an expiry date in form MM/YY");
                 return;
             }
-            return;
+
+            Reservation reservation = DatabaseConnectionHandler.getInstance().getReservation(confNo, customer);
+
+            if (reservation == null && confNo != null && !confNo.isEmpty()) {
+                showRentError(String.format("Could not find a reservation using confNo: %s", confNo));
+                return;
+            } else if (reservation == null) {
+                showRentError(String.format("COuld not find a reservation using dlicense: %s", customer.getLicense()));
+                return;
+            }
+            if (!nearEnoughStart(reservation.getStartTime())) {
+                showRentError("Rentals can only be made within 7 days of today, and cannot be started before current time");
+                return;
+            }
+
+            Rental r = DatabaseConnectionHandler.getInstance().createRentalFromReservation(
+                    reservation,
+                    customer,
+                    creditCardName,
+                    creditCardNumber,
+                    expiryDate
+            );
+
+            if (r == null) {
+                showRentError("Could not find available vehicle for desired rental");
+                return;
+            }
+
+            try {
+                confirmRent(event, r, VehicleTypeName.getVehicleTypeName(reservation.getVtname()), reservation.getBranch(), customer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         } else {
             Branch location = BranchUtil.decodeBranchFromString(locationPicker.getValue());
             if (location == null) {
                 showRentError("You must select a branch");
+                return;
+            }
+            if (vehicleTypePicker.getValue() == null) {
+                showRentError("You must select a vehicle type");
                 return;
             }
             VehicleTypeName vehicleTypeName = VehicleTypeName.getVehicleTypeName(vehicleTypePicker.getValue());
@@ -239,6 +278,16 @@ public class RentController implements Initializable {
             Timestamp endTimeStamp = TimeUtil.getTimeStamp(endDate, endTime);
             if (endTimeStamp == null) {
                 showRentError("You must select an end time and date");
+                return;
+            }
+
+            if (startTimestamp.getTime() >= endTimeStamp.getTime()) {
+                showRentError("Start time must be before end time");
+                return;
+            }
+
+            if (!nearEnoughStart(startTimestamp)) {
+                showRentError("Rentals can only be made within 7 days of today, and cannot be made before today");
                 return;
             }
             String creditCardName = noReservationCreditCardName.getText();
@@ -267,6 +316,10 @@ public class RentController implements Initializable {
                     creditCardNumber,
                     expiryDate
             );
+            if (r == null) {
+                showRentError("Could not find available vehicle for desired rental");
+                return;
+            }
 
             try {
                 confirmRent(event, r, vehicleTypeName, location, customer);
@@ -274,6 +327,17 @@ public class RentController implements Initializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean nearEnoughStart(Timestamp proposedStartTime) {
+        Instant now = Instant.now();
+        Instant proposedInstant = Instant.ofEpochMilli(proposedStartTime.getTime());
+        if (proposedInstant.toEpochMilli() < now.toEpochMilli()) {
+            return false;
+        }
+
+        Duration d = Duration.between(now, proposedInstant);
+        return d.toDays() < 7;
     }
 
     private void showRentError(String message) {
