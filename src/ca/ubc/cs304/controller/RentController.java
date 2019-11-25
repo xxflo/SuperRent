@@ -109,7 +109,7 @@ public class RentController implements Initializable {
         } else if (odometer < existingRental.getOdometer()) {
             showReturnError(String.format("The end odometer value must be greater than the starting: %s", existingRental.getOdometer()));
             return;
-        } else if (returnTimestamp.getTime() < existingRental.getStartTime().getTime()) {
+        } else if (returnTimestamp.getTime() <= existingRental.getStartTime().getTime()) {
             showReturnError(String.format("The return time must be greater than the rental start time: %s", existingRental.getStartTime().toString()));
             return;
         }
@@ -261,6 +261,10 @@ public class RentController implements Initializable {
                 showRentError("You must select a branch");
                 return;
             }
+            if (vehicleTypePicker.getValue() == null) {
+                showRentError("You must select a vehicle type");
+                return;
+            }
             VehicleTypeName vehicleTypeName = VehicleTypeName.getVehicleTypeName(vehicleTypePicker.getValue());
             if (vehicleTypeName == null) {
                 showRentError("You must select a vehicle type");
@@ -277,7 +281,7 @@ public class RentController implements Initializable {
                 return;
             }
 
-            if (startTimestamp.getTime() > endTimeStamp.getTime()) {
+            if (startTimestamp.getTime() >= endTimeStamp.getTime()) {
                 showRentError("Start time must be before end time");
                 return;
             }
