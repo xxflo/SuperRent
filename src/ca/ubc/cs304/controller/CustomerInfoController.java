@@ -3,14 +3,13 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.model.Branch;
 import ca.ubc.cs304.model.Customer;
-import ca.ubc.cs304.model.VehicleType;
 import ca.ubc.cs304.model.VehicleTypeName;
+import ca.ubc.cs304.util.LengthConstants;
 import ca.ubc.cs304.util.SceneSwitchUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.io.IOException;
@@ -18,8 +17,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class CustomerInfoController implements Initializable {
     public TextField driverLicense;
@@ -42,23 +39,27 @@ public class CustomerInfoController implements Initializable {
     private VehicleTypeName intendedVehicleType;
     private String nextView;
 
-//    public Branch intendedBranch;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
     public void handleExistingLogin(ActionEvent actionEvent) throws IOException {
-        if (!driverLicense.getText().isEmpty()){
+        String license = driverLicense.getText();
+        if (license.isEmpty()){
+            labelError.setText("Driver license cannot be empty.");
+            driverLicense.setStyle("-fx-border-color: red");
+        } else if (license.length() != LengthConstants.LICENSE_LENGTH) {
+            labelError.setText("Driver license needs to be " +
+                    LengthConstants.LICENSE_LENGTH + " characters long.");
+            driverLicense.setStyle("-fx-border-color: red");
+        } else {
+            labelError.setText("");
             customer = getCustomer(driverLicense.getText());
             if (customer == null) {
                 labelError.setText("Customer does not exist. Try again or sign up instead.");
             } else {
                 switchToNextView(actionEvent,intendedVehicleType,customer);
             }
-        } else {
-            labelError.setText("Field cannot be empty");
-            driverLicense.setStyle("-fx-border-color: red");
         }
     }
 
@@ -67,17 +68,26 @@ public class CustomerInfoController implements Initializable {
         String phoneNum = newCellNumber.getText();
         String address = newAddress.getText();
         String name = newName.getText();
-        if (!license.isEmpty()){
-            customer = new Customer(phoneNum,name,address,license);
+        if (license.isEmpty()){
+            newDriverLicense.setStyle("-fx-border-color: red");
+            newLabelError.setText("Driver license cannot be empty.");
+        } else if (license.length() != LengthConstants.LICENSE_LENGTH) {
+            newDriverLicense.setStyle("-fx-border-color: red");
+            newLabelError.setText("Driver license needs to be " +
+                    LengthConstants.LICENSE_LENGTH + " characters long.");
+        } else if (phoneNum != null && phoneNum.length() > LengthConstants.PHONE_LENGTH){
+            newCellNumber.setStyle("-fx-border-color: red");
+            newLabelError.setText("Phone number needs to be less than " +
+                    LengthConstants.PHONE_LENGTH + " characters long.");
+        } else {
+            newLabelError.setText("");
+            customer = new Customer(license, phoneNum, address, name);
             boolean success = saveCustomer(customer);
             if (!success) {
-                newLabelError.setText("Database error. Try again.");
+                newLabelError.setText("This license number already exists. Try again.");
             } else {
                 switchToNextView(actionEvent,intendedVehicleType,customer);
             }
-        } else {
-            newDriverLicense.setStyle("-fx-border-color: red");
-            newLabelError.setText("Driver license cannot be empty.");
         }
     }
 
@@ -100,7 +110,7 @@ public class CustomerInfoController implements Initializable {
         this.endT = endTime;
     }
 
-    public void setNextView(String fxml) {
+    void setNextView(String fxml) {
         this.nextView = fxml;
     }
 
