@@ -65,15 +65,8 @@ public class ConfirmationController implements Initializable {
         reservationPane.setVisible(true);
         reservationConfNum.setText(String.valueOf(reservation.getConfNo()));
         reservationTypeName.setText(reservation.getVtname());
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-            Date parsedStartDate = dateFormat.parse(reservation.getStartTime().toString());
-            Date parsedEndDate = dateFormat.parse(reservation.getEndTime().toString());
-            reservationFromTime.setText(parsedStartDate.toString());
-            reservationToTime.setText(parsedEndDate.toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        reservationFromTime.setText(getFormattedDate(reservation.getStartTime()));
+        reservationToTime.setText(getFormattedDate(reservation.getEndTime()));
     }
 
     void setRental(Rental rental, VehicleTypeName vtname, Branch b, Customer c) {
@@ -86,7 +79,7 @@ public class ConfirmationController implements Initializable {
         }
 
         rentalVtName.setText(vtname.getName());
-        rentalStartTime.setText(rental.getStartTime().toString());
+        rentalStartTime.setText(getFormattedDate(rental.getStartTime()));
         rentalLocation.setText(b.getLocation() + " , " + b.getCity());
         rentalDuration.setText(getDaysBetween(rental.getStartTime(), rental.getEndTime()) + " days");
 
@@ -105,8 +98,8 @@ public class ConfirmationController implements Initializable {
             returnConfNo.setText("No reservation made");
         }
         returnVtName.setText(vtname.getName());
-        returnStartDate.setText(rent.getStartTime().toString());
-        returnReturnTime.setText(r.getReturnTime().toString());
+        returnStartDate.setText(getFormattedDate(rent.getStartTime()));
+        returnReturnTime.setText(getFormattedDate(r.getReturnTime()));
         returnDuration.setText(getDaysBetween(rent.getStartTime(), r.getReturnTime()) + " days");
 
         returnCustomerAddress.setText(c.getAddress());
@@ -132,5 +125,16 @@ public class ConfirmationController implements Initializable {
 
     public void handleGoBackMainPressed(ActionEvent actionEvent) throws IOException {
         sceneSwitchUtil.switchSceneTo(actionEvent, SceneSwitchUtil.loginFxml);
+    }
+
+    private String getFormattedDate(Timestamp timestamp){
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            Date parsedDate = dateFormat.parse(timestamp.toString());
+            return parsedDate.toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
