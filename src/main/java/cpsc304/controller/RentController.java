@@ -89,12 +89,12 @@ public class RentController implements Initializable {
             return;
         }
 
-        int odometer = Integer.valueOf(returnOdometer.getText());
-        if (odometer == 0) {
+        if (returnOdometer.getText() == null) {
             showReturnError("You must enter the return odometer");
             return;
         }
 
+        int odometer = Integer.valueOf(returnOdometer.getText());
         Timestamp returnTimestamp = TimeUtil.getTimeStamp(returnDate, returnTime);
         if (returnTimestamp == null) {
             showReturnError("You must enter the return time");

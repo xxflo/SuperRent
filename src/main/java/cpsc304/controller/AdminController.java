@@ -30,7 +30,6 @@ public class AdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewBox.getItems().addAll(
-                "TIMEPERIOD",
                 "CUSTOMER",
                 "RESERVATION",
                 "RENT",
