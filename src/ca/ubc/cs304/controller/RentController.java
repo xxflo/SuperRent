@@ -56,6 +56,7 @@ public class RentController implements Initializable {
     public Text returnError;
 
     private Customer customer;
+    private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
 
     private static double maxKmRental = 2000;
 
@@ -354,5 +355,9 @@ public class RentController implements Initializable {
         this.customer = customer;
         reservationDriverLicense.setText(customer.getLicense());
         noReservationDriverLicense.setText(customer.getLicense());
+    }
+
+    public void handleGoBackMainPressed(ActionEvent actionEvent) throws IOException {
+        sceneSwitchUtil.switchSceneTo(actionEvent, SceneSwitchUtil.loginFxml);
     }
 }

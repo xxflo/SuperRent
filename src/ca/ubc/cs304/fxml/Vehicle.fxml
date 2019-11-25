@@ -38,5 +38,6 @@
         <Accordion fx:id="resultAccordion" layoutX="30" layoutY="150" prefHeight="300.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="390.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
         </Accordion>
     </Pane>
+      <Button layoutX="639.0" layoutY="457.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="30.0" prefWidth="128.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
 </children>
 </AnchorPane>

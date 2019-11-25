@@ -18,6 +18,7 @@ public class ClerkController implements Initializable {
 
     public Button rentReturnButton;
     public Button reportButton;
+    private SceneSwitchUtil sceneSwitchUtil = SceneSwitchUtil.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -34,5 +35,9 @@ public class ClerkController implements Initializable {
             customerInfoController.setNextView(SceneSwitchUtil.rentFxml);
             SceneSwitchUtil.getInstance().switchSceneTo(event, root);
         }
+    }
+
+    public void handleGoBackMainPressed(ActionEvent actionEvent) throws IOException {
+        sceneSwitchUtil.switchSceneTo(actionEvent, SceneSwitchUtil.loginFxml);
     }
 }
