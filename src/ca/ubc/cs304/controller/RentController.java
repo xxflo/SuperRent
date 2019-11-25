@@ -244,6 +244,11 @@ public class RentController implements Initializable {
                     expiryDate
             );
 
+            if (r == null) {
+                showRentError("Could not find available vehicle for desired rental");
+                return;
+            }
+
             try {
                 confirmRent(event, r, VehicleTypeName.getVehicleTypeName(reservation.getVtname()), reservation.getBranch(), customer);
             } catch (IOException e) {
@@ -307,6 +312,10 @@ public class RentController implements Initializable {
                     creditCardNumber,
                     expiryDate
             );
+            if (r == null) {
+                showRentError("Could not find available vehicle for desired rental");
+                return;
+            }
 
             try {
                 confirmRent(event, r, vehicleTypeName, location, customer);

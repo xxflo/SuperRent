@@ -76,7 +76,7 @@ public class ConfirmationController implements Initializable {
         if (rental.getConfNo() != null) {
             rentalConfNo.setText(rental.getConfNo());
         } else {
-            rentalConfNo.setText("No reservation made");
+            rentalConfNo.setText("No prior reservation made");
         }
 
         rentalVtName.setText(vtname.getName());
