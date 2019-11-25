@@ -65,6 +65,7 @@ public class ConfirmationController implements Initializable {
         reservationPane.setVisible(true);
         reservationConfNum.setText(String.valueOf(reservation.getConfNo()));
         reservationTypeName.setText(reservation.getVtname());
+        reservationLocation.setText(reservation.getBranch().toString());
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
             Date parsedStartDate = dateFormat.parse(reservation.getStartTime().toString());

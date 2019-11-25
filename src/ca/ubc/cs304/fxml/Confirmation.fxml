@@ -6,7 +6,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.ConfirmationController">
    <children>
-       <Pane fx:id="reservationPane" prefHeight="400.0" prefWidth="800.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+       <Pane fx:id="reservationPane" opacity="0.8" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
            <Label alignment="CENTER" layoutX="230.0" layoutY="80.0" prefHeight="23.0" text="Your Reservation is Confirmed!" textFill="#000">
                <font>
                    <Font name="American Typewriter" size="25.0" />
@@ -14,44 +14,52 @@
            </Label>
            <Label layoutX="123.0" layoutY="148.0" prefHeight="32.0" prefWidth="192.0" text="Confirmation Number: " textAlignment="RIGHT">
                <font>
-                   <Font name="American Typewriter" size="18.0" />
+                   <Font name="Arial" size="18.0" />
                </font>
            </Label>
            <Label fx:id="reservationConfNum" layoutX="315.0" layoutY="148.0" prefHeight="32.0" prefWidth="354.0" text=" ">
                <font>
-                   <Font name="American Typewriter" size="18.0" />
+                   <Font name="Arial" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="reservationTypeName" layoutX="239.0" layoutY="195.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="reservationTypeName" layoutX="315.0" layoutY="195.0" prefHeight="32.0" prefWidth="354.0" text=" ">
                <font>
-                   <Font name="ACaslonPro-Regular" size="18.0" />
+                   <Font name="Arial" size="18.0" />
                </font>
            </Label>
-           <Label layoutX="123.0" layoutY="232.0" prefHeight="32.0" prefWidth="66.0" text="From:" textAlignment="RIGHT">
+           <Label layoutX="255.0" layoutY="232.0" prefHeight="32.0" prefWidth="66.0" text="From:" textAlignment="RIGHT">
                <font>
-                   <Font name="American Typewriter" size="18.0" />
+                   <Font name="Arial" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="reservationFromTime" layoutX="183.0" layoutY="232.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="reservationFromTime" layoutX="315.0" layoutY="232.0" prefHeight="32.0" prefWidth="354.0" text=" ">
                <font>
-                   <Font name="ACaslonPro-Regular" size="18.0" />
+                   <Font name="Arial" size="18.0" />
                </font>
            </Label>
-           <Label layoutX="123.0" layoutY="273.0" prefHeight="32.0" prefWidth="41.0" text="To: ">
+           <Label layoutX="274.0" layoutY="273.0" prefHeight="32.0" prefWidth="41.0" text="To: ">
                <font>
-                   <Font name="American Typewriter" size="18.0" />
+                   <Font name="Arial" size="18.0" />
                </font>
            </Label>
-           <Label fx:id="reservationToTime" layoutX="183.0" layoutY="273.0" prefHeight="32.0" prefWidth="354.0" text=" ">
+           <Label fx:id="reservationToTime" layoutX="315.0" layoutY="273.0" prefHeight="32.0" prefWidth="354.0" text=" ">
                <font>
-                   <Font name="ACaslonPro-Regular" size="18.0" />
+                   <Font name="Arial" size="18.0" />
                </font>
            </Label>
-         <Label layoutX="123.0" layoutY="197.0" text="Vehicle Type:">
+         <Label layoutX="194.0" layoutY="198.0" text="Vehicle Type:">
             <font>
-               <Font size="18.0" />
+               <Font name="Arial" size="18.0" />
             </font>
          </Label>
+         <Label layoutX="230.0" layoutY="317.0" text="Location:">
+            <font>
+               <Font name="Arial" size="18.0" />
+            </font></Label>
+         <Label fx:id="reservationLocation" layoutX="315.0" layoutY="312.0" prefHeight="32.0" prefWidth="354.0">
+            <font>
+               <Font name="Arial" size="18.0" />
+            </font></Label>
        </Pane>
         <Button fx:id="btnGoBackHome" layoutX="325.0" layoutY="416.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="50.0" prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
       <Pane fx:id="rentPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" visible="false">
