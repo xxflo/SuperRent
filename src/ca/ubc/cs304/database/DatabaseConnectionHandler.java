@@ -695,8 +695,8 @@ public class DatabaseConnectionHandler {
         try {
             connection.setAutoCommit(false);
             String rid = UUID.randomUUID().toString();
-            String endTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", reservation.getStartTime());
-            String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", reservation.getEndTime());
+            String endTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", reservation.getEndTime());
+            String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", reservation.getStartTime());
 
             String sql = String.format(
                     "INSERT INTO RENT (rid, vlicense, dlicense, fromDateTime, toDateTime, odometer, cardName, cardNo, ExpDate, confNo) " +

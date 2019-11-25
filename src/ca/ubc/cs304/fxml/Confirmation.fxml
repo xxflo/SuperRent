@@ -6,7 +6,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.ConfirmationController">
    <children>
-       <Pane fx:id="reservationPane" opacity="0.8" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+       <Pane fx:id="reservationPane" opacity="0.8" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
            <Label alignment="CENTER" layoutX="230.0" layoutY="80.0" prefHeight="23.0" text="Your Reservation is Confirmed!" textFill="#000">
                <font>
                    <Font name="American Typewriter" size="25.0" />
@@ -62,10 +62,10 @@
             </font></Label>
        </Pane>
         <Button fx:id="btnGoBackHome" layoutX="325.0" layoutY="416.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="50.0" prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
-      <Pane fx:id="rentPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" visible="false">
+      <Pane fx:id="rentPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;">
          <children>
             <Label layoutX="80.0" layoutY="98.0" text="Confirmation Number:" />
-            <Text layoutX="241.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Rental is Confirmed">
+            <Text layoutX="241.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Rental is Complete">
                <font>
                   <Font size="29.0" />
                </font>
@@ -79,14 +79,14 @@
             <Text fx:id="rentalLocation" layoutX="139.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loc" />
             <Label layoutX="80.0" layoutY="216.0" text="Duration:" />
             <Text fx:id="rentalDuration" layoutX="137.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="7 Days" />
-            <Label layoutX="335.0" layoutY="98.0" text="Customer Name:" />
-            <Text fx:id="rentalCustomerName" layoutX="436.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ross Geller" />
-            <Label layoutX="335.0" layoutY="126.0" text="Driver License:" />
-            <Text fx:id="rentalCustomerDriverLicense" layoutX="424.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="123645845" />
-            <Label layoutX="335.0" layoutY="157.0" text="Address:" />
-            <Text fx:id="rentalCustomerAddress" layoutX="389.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="12345 Eddington" />
-            <Label layoutX="335.0" layoutY="192.0" text="Phone Number:" />
-            <Text fx:id="rentalCustomerPhoneNumber" layoutX="425.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="604-555-5555" />
+            <Label layoutX="366.0" layoutY="125.0" text="Customer Name:" />
+            <Text fx:id="rentalCustomerName" layoutX="467.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ross Geller" />
+            <Label layoutX="366.0" layoutY="153.0" text="Driver License:" />
+            <Text fx:id="rentalCustomerDriverLicense" layoutX="455.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="123645845" />
+            <Label layoutX="366.0" layoutY="184.0" text="Address:" />
+            <Text fx:id="rentalCustomerAddress" layoutX="420.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="12345 Eddington" />
+            <Label layoutX="366.0" layoutY="219.0" text="Phone Number:" />
+            <Text fx:id="rentalCustomerPhoneNumber" layoutX="456.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="604-555-5555" />
          </children>
       </Pane>
        <Pane fx:id="returnPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" visible="false">
