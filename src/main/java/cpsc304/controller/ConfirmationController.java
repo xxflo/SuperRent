@@ -31,6 +31,7 @@ public class ConfirmationController implements Initializable {
     public Text rentalLocation;
     public Text rentalDuration;
     public Text rentalCustomerName;
+    public Text rentalVehicleLicense;
     public Text rentalCustomerDriverLicense;
     public Text rentalCustomerAddress;
     public Text rentalCustomerPhoneNumber;
@@ -45,6 +46,7 @@ public class ConfirmationController implements Initializable {
     public Text returnCustomerAddress;
     public Text returnCustomerPhoneNumber;
     public Text returnReceipt;
+    public Text returnVehicleLicense;
 
     public Button btnGoBackHome;
 
@@ -81,6 +83,7 @@ public class ConfirmationController implements Initializable {
         rentalStartTime.setText(getFormattedDate(rental.getStartTime()));
         rentalLocation.setText(b.getLocation() + " , " + b.getCity());
         rentalDuration.setText(getDaysBetween(rental.getStartTime(), rental.getEndTime()) + " days");
+        rentalVehicleLicense.setText(rental.getVlicense());
 
         rentalCustomerAddress.setText(c.getAddress());
         rentalCustomerName.setText(c.getName());
@@ -100,6 +103,7 @@ public class ConfirmationController implements Initializable {
         returnStartDate.setText(getFormattedDate(rent.getStartTime()));
         returnReturnTime.setText(getFormattedDate(r.getReturnTime()));
         returnDuration.setText(getDaysBetween(rent.getStartTime(), r.getReturnTime()) + " days");
+        returnVehicleLicense.setText(rent.getVlicense());
 
         returnCustomerAddress.setText(c.getAddress());
         returnCustomerName.setText(c.getName());

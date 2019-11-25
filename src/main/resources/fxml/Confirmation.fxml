@@ -141,6 +141,16 @@
                <font>
                   <Font size="15.0" />
                </font></Text>
+            <Label layoutX="103.0" layoutY="270.0" text="Vehicle License:">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Label>
+            <Text fx:id="rentalVehicleLicense" layoutX="215.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vlicense">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
        <Pane fx:id="returnPane" layoutX="-4.0" opacity="0.79" prefHeight="388.0" prefWidth="804.0" style="-fx-background-color: white;" visible="false">
@@ -170,6 +180,8 @@
             <Text fx:id="returnReceipt" layoutX="472.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Big testx" wrappingWidth="302.07568645477295" />
             <Label layoutX="80.0" layoutY="184.0" text="Start Date:" />
             <Text fx:id="returnStartDate" layoutX="146.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="startDate" />
+            <Label layoutX="80.0" layoutY="235.0" text="Vehicle License:" />
+            <Text fx:id="returnVehicleLicense" layoutX="169.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vlicense" />
            </children>
        </Pane>
    </children>
