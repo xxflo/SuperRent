@@ -1,0 +1,59 @@
+.text-input
+{
+-fx-text-fill : #000;
+}
+
+.root{
+    -fx-font-family: "Abel";
+}
+
+.vList
+{
+    -fx-background-color: #fff;
+}
+
+.bg
+{
+    -fx-background-image: url("../images/bg.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+.button:hover
+{
+    -fx-background-color : #355ECE ;
+    -fx-text-fill:  #FFF;
+}
+.button:pressed
+{
+    -fx-background-color : #0C39FF ;
+    -fx-text-fill: #FFF;
+}
+
+.btnSearch
+{
+    -fx-background-color :  #FCBB31;
+    -fx-text-fill:  #FFF;
+}
+
+.btnCancel
+{
+    -fx-background-color :  #eb4034;
+    -fx-text-fill:  #FFF;
+}
+
+@font-face {
+    font-family: 'OpenSansEmoji';
+    src: url('OpenSansEmoji.ttf');
+}
+
+.test_font {
+    -fx-font-family: OpenSansEmoji;
+    -fx-font-size: 15;
+}
+
+/*.titled-pane > .title*/
+/*{*/
+/*    -fx-background-color: #888;*/
+/*}*/
