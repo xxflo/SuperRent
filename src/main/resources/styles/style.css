@@ -14,7 +14,7 @@
 
 .bg
 {
-    -fx-background-image: url("../../../../main/java/ca/ubc/cs304/images/bg.png");
+    -fx-background-image: url("../images/bg.png");
     -fx-background-repeat: stretch;
     -fx-background-size: cover;
     -fx-background-position: center center;
