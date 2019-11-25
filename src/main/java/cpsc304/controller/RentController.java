@@ -89,7 +89,7 @@ public class RentController implements Initializable {
             return;
         }
 
-        if (returnOdometer.getText() == null) {
+        if (returnOdometer.getText() == null || returnOdometer.getText().isEmpty()) {
             showReturnError("You must enter the return odometer");
             return;
         }

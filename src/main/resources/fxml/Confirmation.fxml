@@ -62,7 +62,7 @@
             </font></Label>
        </Pane>
         <Button fx:id="btnGoBackHome" layoutX="323.0" layoutY="384.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="50.0" prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
-      <Pane fx:id="rentPane" layoutX="-1.0" opacity="0.79" prefHeight="385.0" prefWidth="801.0" style="-fx-background-color: white;" visible="false">
+      <Pane fx:id="rentPane" layoutX="-1.0" opacity="0.79" prefHeight="385.0" prefWidth="801.0" style="-fx-background-color: white;">
          <children>
             <Label layoutX="59.0" layoutY="119.0" text="Confirmation Number:">
                <font>
@@ -109,41 +109,41 @@
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="391.0" layoutY="151.0" text="Customer Name:">
+            <Label layoutX="471.0" layoutY="153.0" text="Customer Name:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalCustomerName" layoutX="513.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ross Geller">
+            <Text fx:id="rentalCustomerName" layoutX="593.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ross Geller">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="405.0" layoutY="179.0" text="Driver License:">
+            <Label layoutX="485.0" layoutY="181.0" text="Driver License:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalCustomerDriverLicense" layoutX="514.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="123645845">
+            <Text fx:id="rentalCustomerDriverLicense" layoutX="594.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="123645845">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="447.0" layoutY="207.0" text="Address:">
+            <Label layoutX="527.0" layoutY="209.0" text="Address:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalCustomerAddress" layoutX="514.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" text="12345 Eddington">
+            <Text fx:id="rentalCustomerAddress" layoutX="594.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="12345 Eddington">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="402.0" layoutY="239.0" text="Phone Number:">
+            <Label layoutX="482.0" layoutY="241.0" text="Phone Number:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalCustomerPhoneNumber" layoutX="514.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="604-555-5555">
+            <Text fx:id="rentalCustomerPhoneNumber" layoutX="594.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" text="604-555-5555">
                <font>
                   <Font size="15.0" />
                </font></Text>
          </children>
       </Pane>
-       <Pane fx:id="returnPane" layoutX="-4.0" opacity="0.79" prefHeight="388.0" prefWidth="804.0" style="-fx-background-color: white;">
+       <Pane fx:id="returnPane" layoutX="-4.0" opacity="0.79" prefHeight="388.0" prefWidth="804.0" style="-fx-background-color: white;" visible="false">
            <children>
                <Label layoutX="80.0" layoutY="98.0" text="Confirmation Number:" />
                <Text layoutX="239.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Return is Complete">
