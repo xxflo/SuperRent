@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.AdminController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.ubc.cs304.controller.AdminController">
    <children>
       <TabPane prefHeight="500.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -18,13 +23,18 @@
                             <TableColumn prefWidth="75.0" text="C2" />
                           </columns>
                         </TableView>
+                        <Button layoutX="657.0" layoutY="7.0" onAction="#handleGoBackMainPressed" mnemonicParsing="false" prefHeight="30.0" prefWidth="128.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
           <Tab text="Insert Data">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="655.0" layoutY="6.0" onAction="#handleGoBackMainPressed" mnemonicParsing="false" prefHeight="30.0" prefWidth="128.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
+                     </children>
+              </AnchorPane>
             </content>
           </Tab>
         </tabs>
