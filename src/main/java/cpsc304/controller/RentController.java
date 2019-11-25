@@ -212,7 +212,7 @@ public class RentController implements Initializable {
             }
             String creditCardNumber = reservationCreditCardNumber.getText();
             if (creditCardNumber == null || creditCardNumber.length() != LengthConstants.CREDIT_CARD_NUM_LENGTH) {
-                showRentError("You must enter a credit card number (10 digits long)");
+                showRentError("You must enter a credit card number (16 digits long)");
                 return;
             }
             String expiryDate = reservationExpiryDate.getText();
@@ -228,7 +228,7 @@ public class RentController implements Initializable {
                 showRentError(String.format("Could not find a reservation using confNo: %s", confNo));
                 return;
             } else if (reservation == null) {
-                showRentError(String.format("COuld not find a reservation using dlicense: %s", customer.getLicense()));
+                showRentError(String.format("Could not find a reservation using dlicense: %s", customer.getLicense()));
                 return;
             }
             if (!nearEnoughStart(reservation.getStartTime())) {
@@ -297,7 +297,7 @@ public class RentController implements Initializable {
             }
             String creditCardNumber = noReservationCreditCardNumber.getText();
             if (creditCardNumber == null || creditCardNumber.length() != LengthConstants.CREDIT_CARD_NUM_LENGTH) {
-                showRentError("You must enter a credit card number (10 digits long)");
+                showRentError("You must enter a credit card number (16 digits long)");
                 return;
             }
             String expiryDate = noReservationExpiryDate.getText();

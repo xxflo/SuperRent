@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cpsc304.controller.ConfirmationController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="bg" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cpsc304.controller.ConfirmationController">
    <children>
        <Pane fx:id="reservationPane" opacity="0.8" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
            <Label alignment="CENTER" layoutX="230.0" layoutY="80.0" prefHeight="23.0" text="Your Reservation is Confirmed!" textFill="#000">
@@ -65,9 +62,9 @@
             </font></Label>
        </Pane>
         <Button fx:id="btnGoBackHome" layoutX="323.0" layoutY="384.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="50.0" prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
-      <Pane fx:id="rentPane" layoutX="-1.0" opacity="0.79" prefHeight="385.0" prefWidth="801.0" style="-fx-background-color: white;" visible="true">
+      <Pane fx:id="rentPane" layoutX="-1.0" opacity="0.79" prefHeight="385.0" prefWidth="801.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <Label layoutX="112.0" layoutY="121.0" text="Confirmation Number:">
+            <Label layoutX="59.0" layoutY="119.0" text="Confirmation Number:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
@@ -76,7 +73,7 @@
                   <Font size="29.0" />
                </font>
             </Text>
-            <Text fx:id="rentalConfNo" layoutX="239.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ConfNo">
+            <Text fx:id="rentalConfNo" layoutX="211.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ConfNo">
                <font>
                   <Font size="15.0" />
                </font></Text>
@@ -84,69 +81,69 @@
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalVtName" layoutX="195.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vtname">
+            <Text fx:id="rentalVtName" layoutX="214.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vtname">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="112.0" layoutY="180.0" text="Start Date:">
+            <Label layoutX="129.0" layoutY="180.0" text="Start Date:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalStartTime" layoutX="182.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="startTime">
+            <Text fx:id="rentalStartTime" layoutX="213.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="startTime">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="112.0" layoutY="206.0" text="Location:">
+            <Label layoutX="139.0" layoutY="208.0" text="Location:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalLocation" layoutX="171.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loc">
+            <Text fx:id="rentalLocation" layoutX="214.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loc">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="112.0" layoutY="239.0" text="Duration:">
+            <Label layoutX="139.0" layoutY="239.0" text="Duration:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalDuration" layoutX="169.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="7 Days">
+            <Text fx:id="rentalDuration" layoutX="215.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="7 Days">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="398.0" layoutY="122.0" text="Customer Name:">
+            <Label layoutX="391.0" layoutY="151.0" text="Customer Name:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalCustomerName" layoutX="499.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ross Geller">
+            <Text fx:id="rentalCustomerName" layoutX="513.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ross Geller">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="398.0" layoutY="150.0" text="Driver License:">
+            <Label layoutX="405.0" layoutY="179.0" text="Driver License:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalCustomerDriverLicense" layoutX="487.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="123645845">
+            <Text fx:id="rentalCustomerDriverLicense" layoutX="514.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="123645845">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="398.0" layoutY="181.0" text="Address:">
+            <Label layoutX="447.0" layoutY="207.0" text="Address:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalCustomerAddress" layoutX="452.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="12345 Eddington">
+            <Text fx:id="rentalCustomerAddress" layoutX="514.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" text="12345 Eddington">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Label layoutX="398.0" layoutY="216.0" text="Phone Number:">
+            <Label layoutX="402.0" layoutY="239.0" text="Phone Number:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font></Label>
-            <Text fx:id="rentalCustomerPhoneNumber" layoutX="488.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="604-555-5555">
+            <Text fx:id="rentalCustomerPhoneNumber" layoutX="514.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="604-555-5555">
                <font>
                   <Font size="15.0" />
                </font></Text>
          </children>
       </Pane>
-       <Pane fx:id="returnPane" layoutX="-4.0" opacity="0.79" prefHeight="388.0" prefWidth="804.0" style="-fx-background-color: white;" visible="false">
+       <Pane fx:id="returnPane" layoutX="-4.0" opacity="0.79" prefHeight="388.0" prefWidth="804.0" style="-fx-background-color: white;">
            <children>
                <Label layoutX="80.0" layoutY="98.0" text="Confirmation Number:" />
                <Text layoutX="239.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Return is Complete">
@@ -159,10 +156,8 @@
                <Text fx:id="returnVtName" layoutX="163.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vtname" />
                <Label layoutX="80.0" layoutY="157.0" text="Return Date" />
                <Text fx:id="returnReturnTime" layoutX="150.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="returnDate" />
-               <Label layoutX="80.0" layoutY="210.0" text="Location:" />
-               <Text fx:id="returnLocation" layoutX="139.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loc" />
-               <Label layoutX="79.0" layoutY="241.0" text="Duration:" />
-               <Text fx:id="returnDuration" layoutX="136.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="7 Days" />
+               <Label layoutX="80.0" layoutY="209.0" text="Duration:" />
+               <Text fx:id="returnDuration" layoutX="137.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="7 Days" />
                <Label layoutX="81.0" layoutY="275.0" text="Customer Name:" />
                <Text fx:id="returnCustomerName" layoutX="182.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ross Geller" />
                <Label layoutX="81.0" layoutY="303.0" text="Driver License:" />

@@ -659,7 +659,7 @@ public class DatabaseConnectionHandler {
             if (confNo != null && !confNo.isEmpty()) {
                 sql += String.format("WHERE r.confNo = '%1$s'", confNo);
             } else {
-                sql += String.format("WHERE r.dlicense = '%1$s' ORDER BY fromDateTime DESC", customer.getLicense());
+                sql += String.format("WHERE r.dlicense = '%1$s' ORDER BY fromDateTime ASC", customer.getLicense());
             }
 
             PreparedStatement ps = connection.prepareStatement(sql);
