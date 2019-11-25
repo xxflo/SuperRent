@@ -61,8 +61,8 @@
                <Font name="Arial" size="18.0" />
             </font></Label>
        </Pane>
-        <Button fx:id="btnGoBackHome" layoutX="325.0" layoutY="416.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="50.0" prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
-      <Pane fx:id="rentPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;">
+        <Button fx:id="btnGoBackHome" layoutX="323.0" layoutY="380.0" mnemonicParsing="false" onAction="#handleGoBackMainPressed" prefHeight="50.0" prefWidth="150.0" styleClass="btnSearch" stylesheets="@../styles/style.css" text="Back to Main Page" />
+      <Pane fx:id="rentPane" opacity="0.79" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" visible="false">
          <children>
             <Label layoutX="80.0" layoutY="98.0" text="Confirmation Number:" />
             <Text layoutX="241.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Rental is Complete">
