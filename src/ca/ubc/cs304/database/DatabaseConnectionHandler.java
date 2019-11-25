@@ -231,7 +231,8 @@ public class DatabaseConnectionHandler {
                 String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", startDateTime);
                 dateCrit = String.format(and + "(%1$s > R.fromDateTime AND %2$s < R.toDateTime))", endTimeQuery, startTimeQuery);
             } else {
-                subQuery += ")";
+                String defaultTimeNow = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", new Timestamp(System.currentTimeMillis()));
+                dateCrit = String.format(and + "(%1$s < R.toDateTime))", defaultTimeNow);
             }
             
             String sql = mainQuery + vTypeCrit + cityCrit + and +
