@@ -1,6 +1,7 @@
 package ca.ubc.cs304.database;
 
 import ca.ubc.cs304.model.*;
+import ca.ubc.cs304.util.BranchUtil;
 import ca.ubc.cs304.util.LoginCreds;
 import javafx.util.Pair;
 
@@ -645,6 +646,126 @@ public class DatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
             return 0;
+        }
+    }
+
+    public Reservation getReservation(
+            String confNo,
+            Customer customer
+    ) {
+        try {
+            String sql = "SELECT * FROM RESERVATION r ";
+            if (confNo != null && !confNo.isEmpty()) {
+                sql += String.format("WHERE r.confNo = '%1$s'", confNo);
+            } else {
+                sql += String.format("WHERE r.dlicense = '%1$s' ORDER BY fromDateTime DESC", customer.getLicense());
+            }
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            System.out.println("SQL for fetching reservation: " + sql);
+
+            ps.executeQuery();
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                return new Reservation(
+                        rs.getString("confNo"),
+                        rs.getString("vtname"),
+                        rs.getString("dlicense"),
+                        rs.getTimestamp("fromDateTime"),
+                        rs.getTimestamp("toDateTime"),
+                        BranchUtil.decodeBranchFromString(String.format("%1$s,%2$s", rs.getString("location"), rs.getString("city")))
+                );
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        }
+    }
+
+    public Rental createRentalFromReservation(
+            Reservation reservation,
+            Customer customer,
+            String creditCardName,
+            String creditCardNumber,
+            String expiryDate
+    ) {
+        try {
+            connection.setAutoCommit(false);
+            String rid = UUID.randomUUID().toString();
+            String endTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", reservation.getStartTime());
+            String startTimeQuery = String.format("TO_TIMESTAMP('%1$s','YYYY-MM-DD hh24:mi:ss.ff')", reservation.getEndTime());
+
+            String sql = String.format(
+                    "INSERT INTO RENT (rid, vlicense, dlicense, fromDateTime, toDateTime, odometer, cardName, cardNo, ExpDate, confNo) " +
+                            "SELECT '%1$s', v.vlicense, '%2$s', %3$s, %4$s, v.odometer, '%5$s', '%6$s', '%7$s', '%8$s' " +
+                            "FROM Vehicle v " +
+                            "WHERE v.status = 'available' " +
+                            "and v.vtname = '%9$s' and v.location = '%10$s' and v.city = '%11$s' " +
+                            "and rownum = 1",
+                    rid,
+                    customer.getLicense(),
+                    startTimeQuery,
+                    endTimeQuery,
+                    creditCardName,
+                    creditCardNumber,
+                    expiryDate,
+                    reservation.getConfNo(),
+                    reservation.getVtname(),
+                    reservation.getBranch().getLocation(),
+                    reservation.getBranch().getCity());
+
+            System.out.println("SQL for inserting new rental into table: " + sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.executeUpdate();
+
+            String fetchSql = String.format("SELECT * FROM RENT r WHERE r.rid = '%1$s'", rid);
+            System.out.println("SQL for fetch return: " + fetchSql);
+            ps = connection.prepareStatement(fetchSql);
+            ps.executeQuery(fetchSql);
+            ResultSet rs = ps.getResultSet();
+            if (rs.next()) {
+                Rental r = new Rental(
+                        rs.getString("rid"),
+                        rs.getString("vlicense"),
+                        rs.getString("dlicense"),
+                        rs.getInt("odometer"),
+                        rs.getString("cardname"),
+                        rs.getString("cardNo"),
+                        rs.getString("expdate"),
+                        rs.getString("confno"),
+                        rs.getTimestamp("fromDateTime"),
+                        rs.getTimestamp("toDateTime")
+                );
+                ps.close();
+
+                String updateVehicleSql = String.format(
+                        "UPDATE VEHICLE " +
+                                "SET status = 'rented' " +
+                                "WHERE vlicense = '%1$s'",
+                        r.getVlicense());
+
+                System.out.println(String.format("Query to update vehicle: %s", updateVehicleSql));
+                ps = connection.prepareStatement(updateVehicleSql);
+                ps.executeUpdate();
+                connection.commit();
+                return r;
+            }
+            ps.close();
+            return null;
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+            return null;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
